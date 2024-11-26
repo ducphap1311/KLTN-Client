@@ -1,0 +1,182 @@
+@import 'variables';
+@import 'mixin';
+.checkout{
+    font-family: $poppins-font;
+    max-width: 1140px;
+    margin: 200px auto 100px;
+    padding: 0 20px;
+}
+
+.checkout-title{
+    h2{
+        font-size: 32px;
+        margin-bottom: 30px;
+        letter-spacing: 0.8px;
+    }
+}
+
+.checkout-information-container{
+    @include flex(row, space-between, flex-start);
+}
+
+.checkout-information{
+    max-width: 528px;
+    width: 100%;
+    margin-right: 20px;
+    p{
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    form{
+        .name-information,
+        .city-information,
+        .district-information,
+        .ward-information,
+        .address-information {
+            label{
+                display: block;
+                font-size: 14px;
+                padding: 1px 4px;
+            }
+            input{
+                width: 100%;
+                padding: 8px 4px;
+                outline: none;
+                border: 1px solid #C2C5E1;
+                font-size: 16px;
+                &:focus{
+                    border-color: $primary-color;
+                }
+                &:hover{
+                    border: 1px solid $primary-color;
+                }
+            }
+            margin-bottom: 15px;
+        }
+        .city-information,
+        .district-information,
+        .ward-information{
+            select{
+                width: 100%;
+                padding: 9px 0;
+                font-size: 15px;
+                outline: none;
+                border: 1px solid #C2C5E1;
+                cursor: pointer;
+                &:hover{
+                    border:1px solid $primary-color;
+                }
+                option{
+                    cursor: pointer;
+                    // color: red;
+                }
+            }
+        }
+        .address-information{
+            margin-bottom: 25px;
+        }
+
+        .name-error,
+        .city-error,
+        .district-error,
+        .ward-error,
+        .address-error{
+            font-size: 13px;
+            color: red;
+        }
+        button{
+            width: 100%;
+            padding: 13px 0;
+            text-transform: uppercase;
+            background-color: $primary-color;
+            color: white;
+            border: none;
+            font-size: 17px;
+            cursor: pointer;
+            border-radius: 5px;
+            &:hover{
+                background-color: $hover-color;
+            }
+            &:active{
+                background-color: $primary-color;
+            }
+        }
+    }
+}
+
+.price-information{
+    max-width: 528px;
+    width: 100%;
+    height: fit-content;
+    padding: 32px;
+    background-color: $primary-color;
+    color: white;
+    border-radius: 15px;
+    font-size: 12px;
+    .subtotal{
+        width: 100%;
+        @include flex(row, space-between, flex-start);
+        margin-bottom: 5px;
+    }
+    .shipping{
+        width: 100%;
+        @include flex(row, space-between, flex-start);
+        margin-bottom: 40px;
+    }
+    .order-total{
+        width: 100%;
+        @include flex(row, space-between, flex-start);
+        font-size: 15px;
+        font-weight: bold;
+        letter-spacing: 0.8px;
+    }
+
+}
+
+.login-to-continue{
+    text-align: center;
+    margin-top: 210px;
+    font-family: $poppins-font;
+    p{
+        font-size: 30px;
+        font-weight: bold;
+        letter-spacing: 0.8px;
+        margin-bottom: 5px;
+    }
+    .login-link{
+        color: $primary-color;
+        font-size: 20px;
+        text-decoration: underline;
+        &:hover{
+            color: $hover-color;
+        }
+    }
+}
+@media screen and (max-width: 768px){
+    .checkout{
+        margin-top: 150px;
+    }
+
+    .checkout-title{
+        text-align: center;
+    }
+
+    .checkout-information-container{
+        @include flex(column, flex-start, center);
+    }
+    
+    .checkout-information{
+        margin-right: 0;
+        margin-bottom: 40px;
+    }
+
+    .login-to-continue{
+        margin: 150px 5px 0;
+        p{
+            font-size: 25px;
+        }
+        .login-link{
+            font-size: 18px;
+        }
+    }
+}

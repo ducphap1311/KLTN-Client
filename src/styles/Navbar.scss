@@ -1,0 +1,443 @@
+@import "_variables";
+@import "_mixin";
+
+*,
+::before,
+::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: white;
+    width: 100%;
+    font-family: $roboto-font;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    border-bottom: 0.4px solid rgb(169, 169, 169);
+
+    .navbar-header {
+        @include flex(row, flex-start, center);
+        max-width: 1200px;
+        margin: 0 auto;
+        height: 80px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0 30px;
+        .menu-btn-container {
+            display: none;
+        }
+        .navbar-logo-container {
+            flex: 1;
+            .logo-img {
+                cursor: pointer;
+                width: 190px;
+                height: 80px;
+                object-fit: contain;
+            }
+        }
+        .navbar-search-container {
+            flex: 1;
+            @include flex(row, center, center);
+            position: relative;
+            .search-input {
+                width: 340px;
+                height: 40px;
+                border-radius: 5px 0 0 5px;
+                outline: none;
+                padding-left: 10px;
+                border: 1px solid $primary-color;
+                &:hover {
+                    box-shadow: -1px 0px 4px white;
+                }
+                &:focus {
+                    box-shadow: -1px 0px 4px white;
+                }
+            }
+            .search-icon-btn {
+                padding: 0 25px;
+                height: 40px;
+                background-color: $primary-color;
+                color: white;
+                border: 1px solid transparent;
+                cursor: pointer;
+                border-radius: 0 5px 5px 0;
+                transition: 0.3s ease;
+                &:hover {
+                    background-color: $hover-color;
+                    border-color: $primary-color;
+                }
+                &:active {
+                    background-color: $primary-color;
+                }
+                i {
+                    font-size: 18px;
+                }
+            }
+            .products-option {
+                position: absolute;
+                width: 100%;
+                background-color: white;
+                top: 45px;
+                border: 1px solid $primary-color;
+                border-radius: 5px;
+                max-height: 400px;
+                overflow-y: scroll;
+                scrollbar-width: auto;
+                .link-name {
+                    @include flex(row, flex-start, center);
+                    text-decoration: none;
+                    color: rgb(97, 125, 152);
+                    padding: 10px;
+                    margin: 5px 0;
+                    letter-spacing: 0.9px;
+                    &:hover {
+                        background-color: rgb(218, 218, 218);
+                    }
+                    .image{
+                        height: 50px;
+                        margin-right: 10px;
+                        
+                    }
+                }
+            }
+        }
+        .navbar-usercart-container {
+            flex: 1;
+            @include flex(row, flex-end, center);
+            .navbar-user {
+                position: relative;
+                cursor: pointer;
+                .username {
+                    color: black;
+                    font-size: 17px;
+                }
+                .login-register-container {
+                    position: absolute;
+                    background-color: white;
+                    top: 30px;
+                    right: 0;
+                    width: 200px;
+                    height: 0;
+                    overflow: hidden;
+                    transition: 0.3s ease;
+                    a {
+                        display: block;
+                        text-decoration: none;
+                        color: black;
+                        padding: 15px;
+                        &:hover {
+                            color: $hover-color;
+                        }
+                    }
+                }
+                .show-dropdown {
+                    height: 98.2px;
+                    box-shadow: 0 0 0.5px 0.5px $primary-color;
+                }
+            }
+
+            .user-icon-btn,
+            .cart-icon-btn {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                i {
+                    color: black;
+                    font-size: 23px;
+                }
+                &:hover {
+                    i {
+                        color: black;
+                    }
+                }
+                &:active {
+                    i {
+                        color: black;
+                    }
+                }
+            }
+            .navbar-cart {
+                margin-left: 20px;
+                .cart-icon-btn {
+                    position: relative;
+                    .amount {
+                        position: absolute;
+                        top: -20px;
+                        right: -20px;
+                        font-size: 20px;
+                        color: white;
+                        background-color: $primary-color;
+                        padding: 2px 5px;
+                        font-size: 14px;
+                        border-radius: 50%;
+                        border: 2px solid transparent;
+                    }
+                    &:hover {
+                        .amount {
+                            border-color: $primary-color;
+                            background-color: $hover-color;
+                        }
+                    }
+                    &:active {
+                        .amount {
+                            background-color: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .navbar-links {
+        @include flex(initial, center, center);
+        height: 45px;
+        max-width: 1200px;
+        margin: 0 auto;
+        li {
+            list-style-type: none;
+            .link {
+                font-size: 15px;
+                margin: 0 40px;
+                border: 1px solid transparent;
+                transition: 0.3s ease;
+                text-decoration: none;
+                color: rgb(75, 85, 99);
+                font-weight: bold;
+                letter-spacing: 1px;
+                &:hover {
+                    color: $primary-color;
+                }
+                &.active {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .sidebar-container {
+        background-color: rgb(236, 236, 236);
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transition: 0.3s ease;
+        transform: translateX(-100%);
+        .sidebar-search {
+            margin: 50px 20px 20px 20px;
+            position: relative;
+            .search-input {
+                width: 180px;
+                height: 33px;
+                border-radius: 5px 0 0 5px;
+                outline: none;
+                padding-left: 10px;
+                border: 1px solid $primary-color;
+                &:focus {
+                    box-shadow: -1px 0px 4px white;
+                }
+            }
+            .search-icon-btn {
+                width: 50px;
+                height: 33px;
+                background-color: $primary-color;
+                color: white;
+                border: 1px solid transparent;
+                cursor: pointer;
+                border-radius: 0 5px 5px 0;
+                transition: 0.3s ease;
+                &:hover {
+                    background-color: $hover-color;
+                    border-color: $primary-color;
+                }
+                &:active {
+                    background-color: $primary-color;
+                }
+            }
+            .products-option {
+                position: absolute;
+                width: 100%;
+                background-color: white;
+                top: 45px;
+                border: 1px solid $primary-color;
+                border-radius: 5px;
+                max-height: 400px;
+                overflow-y: scroll;
+                .link-name {
+                    @include flex(row, flex-start, center);
+                    text-decoration: none;
+                    color: rgb(97, 125, 152);
+                    padding: 10px;
+                    margin: 5px 0;
+                    letter-spacing: 0.9px;
+                    &:hover {
+                        background-color: rgb(218, 218, 218);
+                    }
+                    .image{
+                        height: 40px;
+                        margin-right: 10px;
+                        
+                    }
+                    .name{
+                        font-size: 13px;
+                    }
+                }
+            }
+        }
+        .sidebar-links {
+            li {
+                list-style-type: none;
+                .link {
+                    display: block;
+                    text-decoration: none;
+                    color: black;
+                    padding: 20px 0px;
+                    padding-left: 20px;
+                    transition: 0.3s ease;
+                    font-weight: bold;
+                    &:hover {
+                        padding-left: 30px;
+                        background-color: white;
+                    }
+                }
+            }
+        }
+    }
+
+    .navbar-scroll-to-top-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: 2px solid $primary-color;
+        cursor: pointer;
+        transition: 0.3s ease;
+        i {
+            font-size: 22px;
+            color: $primary-color;
+        }
+        &:hover {
+            background-color: $primary-color;
+            i {
+                color: white;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .navbar {
+        .navbar-header {
+            .menu-btn-container {
+                display: block;
+                width: fit-content;
+                flex: 1;
+                @include flex(initial, flex-start, initial);
+                .menu-btn {
+                    background-color: transparent;
+                    border: none;
+                    cursor: pointer;
+                    transition: 0.3s ease;
+                    i {
+                        font-size: 30px;
+                        color: white;
+                        opacity: 0.6;
+                    }
+                    &:hover {
+                        transform: rotate(90deg);
+                        i {
+                            opacity: 1;
+                        }
+                    }
+                    &:active {
+                        i {
+                            opacity: 0.6;
+                        }
+                    }
+                }
+            }
+            .navbar-search-container {
+                display: none;
+            }
+            .navbar-logo-container {
+                @include flex(initial, center, initial);
+            }
+        }
+        .navbar-links {
+            display: none;
+        }
+        .sidebar {
+            display: block;
+            z-index: 50;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            transform: translateX(-100%);
+        }
+        .show-sidebar {
+            transform: translateX(0);
+        }
+        .show-sidebar-container {
+            transform: translateX(0);
+        }
+        .close-sidebar-btn {
+            position: fixed;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            i {
+                color: rgb(185, 185, 185);
+                font-size: 30px;
+                transition: 0.3s ease;
+            }
+            &:hover {
+                i {
+                    color: white;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 550px) {
+    .navbar {
+        .navbar-header {
+            .menu-btn-container {
+                .menu-btn {
+                    i {
+                        font-size: 25px;
+                    }
+                }
+            }
+            .navbar-logo-container {
+                .logo-img {
+                    width: 140px;
+                    height: auto;
+                }
+            }
+            .navbar-usercart-container{
+                .navbar-user{
+                    .username{
+                        font-size: 13px;
+                    }
+                }
+                .navbar-cart{
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+}

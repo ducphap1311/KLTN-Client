@@ -1,0 +1,159 @@
+@import '_variables';
+@import '_mixin';
+
+.products{
+    margin-top: 180px;
+    margin-bottom: 300px;
+    font-family: $roboto-font;
+    .products-container{
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 10px;
+        @include flex(row, flex-start, flex-start);
+        .products-filter{
+            z-index: 200;
+            letter-spacing: 0.9px;
+            .products-title{
+                font-size: 22px;
+                letter-spacing: 0.9px;
+                margin-bottom: 30px;
+                .link-back-home{
+                    color: rgb(97, 125, 152);
+                    text-decoration: none;
+                    transition: 0.3s ease;
+                    &:hover{
+                        color: black;
+                    }
+                }
+                .slash{
+                    margin: 0 10px;
+                    color: rgba(102,102,102,0.7);
+                }
+                .products-page{
+                    font-weight: bold;
+                }
+            }
+            .categories-container{
+                margin-bottom: 20px;
+                h3{
+                    margin-bottom: 10px;
+                    color: rgb(63, 63, 63);
+                }
+                ul{
+                    li{
+                        cursor: pointer;
+                        list-style-type: none;
+                        color: rgb(97, 125, 152);
+                        margin-bottom: 5px;
+                        width: fit-content;
+                        border-bottom: 2px solid transparent;
+                        transition: 0.3s ease;
+                        &:hover{
+                            border-color: rgb(97, 125, 152);
+                        }
+                        &.category-active{
+                            border-color: rgb(97, 125, 152);
+                        }
+                    }
+                }
+            }
+            .qualities-container{
+                margin-bottom: 20px;
+                h3{
+                    margin-bottom: 10px;
+                    color: rgb(63, 63, 63);
+                }
+                ul{
+                    li{
+                        cursor: pointer;
+                        list-style-type: none;
+                        color: rgb(97, 125, 152);
+                        margin-bottom: 5px;
+                        width: fit-content;
+                        border-bottom: 2px solid transparent;
+                        transition: 0.3s ease;
+                        &:hover{
+                            border-color: rgb(97, 125, 152);
+                        }
+                        &.quality-active{
+                            border-color: rgb(97, 125, 152);
+                        }
+                    }
+                }
+            }
+            .sort-container{
+                @include flex(row, flex-start, center);
+                margin-bottom: 40px;
+                label{
+                    font-size: 17px;
+                    font-weight: bold;
+                    color: rgb(63, 63, 63);
+                }
+                select{
+                    font-size: 17px;
+                    padding: 2px 5px;
+                    border: none;
+                    cursor: pointer;
+                    color: rgb(97, 125, 152)
+                }
+            }
+            .clear-filter-btn{
+                padding: 5px 10px;
+                font-size: 17px;
+                background-color: $primary-color;
+                color: white;
+                border: none;
+                cursor: pointer;
+                transition: 0.3s ease;
+                margin-bottom: 50px;
+                &:hover{
+                    background-color: $hover-color;
+                }
+                &:active{
+                    background-color: $primary-color;
+                }
+            }
+        }
+        .products-list{
+            margin-left: 20px;
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+}
+
+@media screen and (max-width: 1100px){
+    .products{
+        .products-container{
+            padding: 0 20px;
+            .products-list{
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 850px){
+    .products{
+        margin-top: 130px;
+        .products-container{
+            .products-list{
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 550px){
+    .products{
+        .products-container{
+            flex-direction: column;
+            .products-list{
+                width: 100%;
+                margin-left: 0;
+                @include flex(column, flex-start, center);
+            }
+        }
+    }
+}

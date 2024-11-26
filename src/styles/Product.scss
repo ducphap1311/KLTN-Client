@@ -1,0 +1,57 @@
+@import '_variables';
+@import '_mixin';
+
+.product-info{
+    display: block;
+    text-decoration: none;
+    color: black;
+    width: 260px !important;
+    margin: 15px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    padding: 15px 10px;
+    transition: 0.3s ease;
+    height: 330px;
+    &:hover{
+        box-shadow: 0 0 5px $primary-color;
+        .product-img{
+            transform: scale(1.1);
+        }
+    }
+    .product-img{
+        cursor: pointer;
+        height: 170px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+        transition: 0.5s ease-in-out;
+    }
+    .product-name{
+        margin: 15px 0 5px 0;
+    }
+    .product-price{
+        color: $primary-color;
+        margin-bottom: 5px;
+        font-weight: bold;
+        letter-spacing: 0.9px;
+    }
+    .add-btn{
+        width: fit-content;
+        display: block;
+        margin: 0 auto;
+        background-color: $primary-color;
+        color: white;
+        border: 1px solid $primary-color;
+        padding: 5px 20px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s ease;
+        letter-spacing: 0.9px;
+        &:hover{
+            background-color: $hover-color;
+        }
+        &:active{
+            background-color: $primary-color;
+        }
+    }
+}

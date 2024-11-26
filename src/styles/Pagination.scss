@@ -1,0 +1,43 @@
+@import 'variables';
+
+.pagination-container{
+    max-width: 1100px;
+    margin: 100px auto 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 20px;
+    button{
+        padding: 15px 18px;
+        font-size: 17px;
+        border: none;
+        font-family: $roboto-font;
+        cursor: pointer;
+        letter-spacing: 0.9px;
+        background-color: rgb(240, 240, 240);
+        transition: 0.3s ease;
+        &:hover{
+            background-color: rgb(220, 220, 220);
+        }
+        &.prev-btn{
+            font-weight: 600;
+            color: rgb(54, 53, 53);
+            border-radius: 10px 0 0 10px;
+        }
+        &.next-btn{
+            font-weight: 600;
+            color: rgb(54, 53, 53);
+            border-radius: 0 10px 10px 0;
+        }
+        &.active-btn{
+            background-color: rgb(220, 220, 220);
+        }
+    }
+}
+
+@media screen and (max-width: 550px){
+    .pagination-container{
+        // justify-content: center;
+        // margin-right: 0;
+    }
+}

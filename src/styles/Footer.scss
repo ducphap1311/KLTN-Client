@@ -1,0 +1,112 @@
+@import 'variables';
+
+.footer{
+    background-color: #272727;
+}
+
+.footer-container{
+    font-family: $poppins-font;
+    color: white;
+    padding: 60px 20px 95px;
+    .footer-underline{
+        max-width: 1200px;
+        margin: 0 auto;
+        height: 0.1rem;
+        background-color: rgb(255, 255, 255);
+    }
+    .footer-info{
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        .footer-header{
+            margin-top: 16px;
+            .footer-header-logo{
+                max-width: 250px;
+                margin-bottom: 5px;
+            }
+            .footer-header-img{
+                width: 200px;
+                height: 63.36px;
+                object-fit: cover;
+            }
+            .footer-header-subtitle{
+                font-style: normal;
+                max-width: 255px;
+                height: 46px;
+                font-weight: 400;
+                line-height: 23px;
+                letter-spacing: -0.5px;
+                font-size: 16px;
+            }
+        }
+        .contact-info,
+        .about-us,
+        .connect-with-us{
+            margin-top: 16px;
+            h4{
+                color: $primary-color;
+                margin-bottom: 10px;
+            }
+            .info{
+                p{
+                    margin-bottom: 15px;
+                    i{
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+        .connect-with-us{
+            .info{
+                p{
+                    a{
+                        text-decoration: none;
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        i{
+                            margin-right: 5px;
+                            color: white;
+                            font-size: 19px;
+                        }
+                        &:hover{
+                            i{
+                                color: $primary-color;
+                            }
+                            span{
+                                color: $primary-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .footer-container{
+        .footer-info{
+            display: inline;
+            flex-direction: column;
+            margin: 0 auto;
+            width: fit-content;
+            .footer-header{
+                margin: 16px 0 20px;
+                .footer-header-logo{
+                    border: none;
+                }
+                .footer-header-subtitle{
+                    max-width: none;
+                }
+            }
+            .contact-info,
+            .about-us,
+            .connect-with-us{
+                margin: 16px 0 30px;
+            }
+            
+        }
+    }
+}

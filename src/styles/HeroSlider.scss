@@ -1,0 +1,200 @@
+@import "_variables";
+
+.hero-slider{
+    margin-top: 125px;
+    .slick-slider{
+        font-family: $poppins-font;
+        transition: 0.3s ease;
+        cursor: grab;
+        &:hover {
+            .slick-prev{
+                opacity: 1;
+                left: 30px;
+            }
+            .slick-next{
+                opacity: 1;
+                right: 30px;
+            }
+        }
+    }
+    .slick-prev{
+        left: 40px;
+    }
+    
+    .slick-next{
+        width: fit-content;
+        right: 40px;
+    }
+    
+    .slick-arrow{
+        z-index: 20;
+        opacity: 0;
+        transition: 0.3s ease;
+        &::before{
+            font-size: 42px;
+        }
+        &:hover{
+            &::before{
+                color: $primary-color;
+            }
+        }
+        &:active{
+            &::before{
+                color: white;
+            }
+        }
+    }
+    
+    .slider-child{
+        position: relative;
+        .slider-img{
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+        .slider-text{
+            position: absolute;
+            left: 15%;
+            top: 50%;
+            transform: translate(0, -50%);
+            z-index: 100;
+            transition: 0.3s ease;
+            .title{
+                color: white;
+                font-size: 50px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .info{
+                color: white;
+                max-width: 500px;
+                line-height: 25px;
+                letter-spacing: 0.8px;
+                margin-bottom: 15px;
+            }
+            .watch-btn{
+                padding: 10px 50px;
+                font-size: 20px;
+                background-color: transparent;
+                border-radius: 5px;
+                border: 2px solid white;
+                color: white;
+                cursor: pointer;
+                transition: 0.3s ease;
+                font-weight: bold;
+                &:hover{
+                    background-color: $primary-color;
+                }
+            }
+        }
+    }
+    
+    .slick-dots{
+        bottom: 30px;
+        li{
+            button{
+                &::before{
+                    color: white;
+                    font-size: 20px;
+                }
+            }
+            &.slick-active button::before{
+                opacity: 1;
+                color: white;
+            }   
+        }
+    }
+}
+
+@media screen and (max-width: 850px){
+    .hero-slider{
+        margin-top: 100px;
+        .slider-child{
+            .slider-img{
+                height: 450px;
+            }   
+            .slider-text{
+                left: 10%;
+                .title{
+                    font-size: 45px;
+                }
+                .info{
+                    font-size: 13px;
+                }
+                .watch-btn{
+                    font-size: 16px;
+                }
+            }
+        }
+        .slick-arrow{
+            &::before{
+                font-size: 35px;
+            }
+        }
+        .slick-dots{
+            bottom: 30px;
+            li{
+                button{
+                    &::before{
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 550px){
+    .hero-slider{
+        .slider-child{
+            .slider-img{
+                height: 300px;
+            }
+            .slider-text{
+                max-width: 300px;
+                .title{
+                    font-size: 30px;
+                }
+                .info{
+                    font-size: 10px;
+                }
+                .watch-btn{
+                    font-size: 14px;
+                }
+            }
+        }
+        .slick-arrow{
+            display: none !important;
+        }
+    }
+}
+
+@media screen and (min-width: 1950px) {
+    .hero-slider{
+        .slider-child{
+            .slider-text{
+                left: 25%;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 2600px) {
+    .hero-slider{
+        .slider-child{
+            .slider-text{
+                left: 30%;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 3500px) {
+    .hero-slider{
+        .slider-child{
+            .slider-text{
+                left: 40%;
+            }
+        }
+    }
+}

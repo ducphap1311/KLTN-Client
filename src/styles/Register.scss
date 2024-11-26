@@ -1,0 +1,146 @@
+@import '_variables';
+@import '_mixin';
+
+.register{
+    font-family: $roboto-font;
+    height: 100vh;
+    @include flex(row, center, center);
+    padding-top: 200px;
+    
+    .register-form{
+        height: fit-content;
+        width: 544px;
+        padding: 40px;
+        box-shadow: 0px 0px 25px 10px #F8F8FB;
+        .register-title{
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            text-align: center;
+        }
+        .register-subtitle{
+            margin-bottom: 37px;
+            font-size: 17px;
+            color: #9096B2;
+            text-align: center;
+        }
+        
+        .username-container,
+        .email-container{
+            margin-bottom: 23px;
+        }
+        .password-container{
+            margin-bottom: 10px;
+        }
+        .email-input,
+        .username-input,
+        .password-input{
+            outline: none;
+            border-radius: 2px;
+            border: 1px solid #C2C5E1;
+            background: #FFF;
+            font-size: 17px;
+            &::placeholder{
+                font-size: 17px;
+                color: #9096B2;
+            }
+            &:hover{
+                border-color: $primary-color;
+            }
+            &:focus{
+                border-color: $primary-color;
+            }
+        }
+        .username-input{
+            padding: 15px 13px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .email-input{
+            padding: 15px 13px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .password-input{
+            padding: 15px 13px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .password-confirm-input{
+            padding: 15px 13px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .username-error,
+        .email-error,
+        .password-error{
+            text-align: left;
+            color: red;
+            font-size: 13px;
+            margin-top: 5px;
+            margin-bottom: 0;
+        }
+        .show-password-container{
+            display: flex;
+            align-items: center;
+            margin-bottom: 23px;
+            width: 100%;
+            color: #9096B2;
+            .checkbox-show-password{
+                cursor: pointer;
+                margin-right: 5px;
+            }
+            .checkbox-show-password-label{
+                cursor: pointer;
+            }
+        }
+        .register-rejected{
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .register-pending{
+            color: #9096B2;
+            text-align: center;
+            margin-bottom: 15px
+        }
+        .register-btn{
+            border-radius: 5px;
+            font-size: 17px;
+            width: 100%;
+            padding: 13px 0;
+            background-color: $primary-color;
+            border: 2px solid transparent;
+            color: white;
+            transition: 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 28px;
+            &:hover{
+                background-color: $hover-color;
+            }
+        }
+        .options{
+            font-size: 17px;
+            color: #9096B2;
+            text-align: center;
+        }
+        .link-to-login{
+            text-decoration: none;
+            color: $primary-color;
+            margin-left: 5px;
+            &:hover{
+                color: $hover-color;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 850px){
+    .register{
+        padding-top: 100px;
+        margin-bottom: 100px;
+        .register-form{
+            padding: 15px;
+        }
+    }
+}
