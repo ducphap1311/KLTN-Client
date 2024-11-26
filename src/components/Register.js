@@ -1,39 +1,16 @@
+// frontend/src/components/Register.js
+
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.scss";
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button, Input, Space } from 'antd';
+import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Flex, Spin } from 'antd';
-
-// const validate = (values) => {
-//     const errors = {};
-//     if (!values.username) {
-//         errors.username = "User name required";
-//     } else if (values.username.length > 20) {
-//         errors.username = "Must be 20 characters or less";
-//     }
-
-//     if (!values.email) {
-//         errors.email = "Email address required";
-//     } else if (
-//         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-//     ) {
-//         errors.email = "Invalid email address";
-//     }
-
-//     if (!values.password) {
-//         errors.password = "Password required";
-//     }
-
-//     return errors;
-// };
 
 export const Register = () => {
     const navigate = useNavigate();
-    const [registerStatus, setRegisterStatus] = useState();
+    const [registerStatus, setRegisterStatus] = useState('idle'); // 'idle', 'pending', 'success', 'rejected'
     const [showPassword, setShowPassword] = useState(false);
     const passwordRef = useRef();
 
@@ -76,28 +53,28 @@ export const Register = () => {
 
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/v1/register",
+                    "http://localhost:5000/api/v1/register", // Đảm bảo URL đúng
                     requestOptions
                 );
                 if (!response.ok) {
-                    throw new Error("Invalid email or password");
+                    const errorData = await response.json();
+                    throw new Error(errorData.msg || "Registration failed");
                 }
                 const responseData = await response.json();
-                const { token, username } = responseData;
-                localStorage.setItem("token", token);
-                localStorage.setItem("username", username);
-                navigate("/");
+                setRegisterStatus("success");
             } catch (error) {
+                console.error(error);
                 setRegisterStatus("rejected");
             }
         },
     });
+
     return (
         <div className="register">
             <form onSubmit={formik.handleSubmit} className="register-form">
                 <h2 className="register-title">Register</h2>
                 <p className="register-subtitle">
-                    Please register using account detail bellow.
+                    Please register using account details below.
                 </p>
                 <div className="username-container">
                     <input
@@ -132,7 +109,7 @@ export const Register = () => {
                     ) : null}
                 </div>
                 <div className="password-container">
-                    <Input.Password
+                    <input // Sử dụng thẻ input thay vì Input.Password để dễ dàng thao tác với ref
                         type="password"
                         id="password"
                         name="password"
@@ -150,17 +127,24 @@ export const Register = () => {
                     ) : null}
                 </div>
                 <div className="show-password-container">
+                    <input
+                        type="checkbox"
+                        checked={showPassword}
+                        onChange={() => setShowPassword(!showPassword)}
+                    /> Show Password
                 </div>
                 {registerStatus === "rejected" ? (
-                    <p className="register-rejected">Invalid email or email used</p>
+                    <p className="register-rejected">Registration failed. Please try again.</p>
                 ) : registerStatus === "pending" ? (
-                    <p
-                        className="register-pending"
-                    >
+                    <p className="register-pending">
                         <Spin indicator={<LoadingOutlined style={{color: "rgb(255, 0, 115)"}} spin />} size="large" />
                     </p>
+                ) : registerStatus === "success" ? (
+                    <p className="register-success">
+                        Registration successful! Please check your email to verify your account.
+                    </p>
                 ) : null}
-                <button type="submit" className="register-btn">
+                <button type="submit" className="register-btn" disabled={registerStatus === "pending"}>
                     Register
                 </button>
                 <p className="options">
