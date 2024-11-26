@@ -38,7 +38,7 @@ export const ResetPassword = () => {
                     }),
                 };
                 const response = await fetch(
-                    `http://localhost:5000/api/v2/reset-password/`,
+                    `http://localhost:5000/api/v1/reset-password/`,
                     requestOptions
                 );
                 if (!response.ok) {

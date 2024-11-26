@@ -50,7 +50,7 @@ const Login = () => {
             };
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/v2/login",
+                    "http://localhost:5000/api/v1/login",
                     requestOptions
                 );
                 if (!response.ok) {
@@ -78,7 +78,7 @@ const Login = () => {
                 body: JSON.stringify({ email }),
             };
             const response = await fetch(
-                "http://localhost:5000/api/v2/forgot-password",
+                "http://localhost:5000/api/v1/forgot-password",
                 requestOptions
             );
             if (!response.ok) {
@@ -107,7 +107,7 @@ const Login = () => {
                 token: localStorage.getItem("resetPasswordToken"),
             }),
         };
-        await fetch("http://localhost:5000/api/v2/send-email", requestOptions);
+        await fetch("http://localhost:5000/api/v1/send-email", requestOptions);
         localStorage.removeItem('resetPasswordToken')
     };
 

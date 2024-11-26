@@ -15,7 +15,7 @@ export const OrderDetail = () => {
     const getSingleOrder = async () => {
         try {
             const response = await fetch(
-                `http://localhost:5000/api/v3/orders/${id}`
+                `http://localhost:5000/api/v1/orders/${id}`
             );
             if (!response.ok) {
                 throw new Error("Invalid order id");

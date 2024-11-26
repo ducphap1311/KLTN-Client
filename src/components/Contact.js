@@ -37,7 +37,7 @@ export const Contact = () => {
                 }),
             };
 
-            fetch("http://localhost:5000/api/v4/messages", requestOptions)
+            fetch("http://localhost:5000/api/v1/messages", requestOptions)
                 .then((res) => {
                     toast("Message sent successfully", {
                         type: "success",

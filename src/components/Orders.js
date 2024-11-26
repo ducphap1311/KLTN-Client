@@ -27,7 +27,7 @@ export const Orders = () => {
                 },
             };
             const response = await fetch(
-                "http://localhost:5000/api/v3/orders",
+                "http://localhost:5000/api/v1/orders",
                 requestOptions
             );
             const responseData = await response.json();

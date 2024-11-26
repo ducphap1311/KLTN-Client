@@ -40,7 +40,7 @@ export const CheckOut = () => {
         };
         try {
             const response = await fetch(
-                "http://localhost:5000/api/v2/dashboard",
+                "http://localhost:5000/api/v1/dashboard",
                 requestOptions
             );
             const responseData = await response.json();
@@ -165,7 +165,7 @@ export const CheckOut = () => {
             };
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/v3/orders",
+                    "http://localhost:5000/api/v1/orders",
                     requestOptions
                 );
                 if (!response) {

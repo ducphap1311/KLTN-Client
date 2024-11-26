@@ -76,7 +76,7 @@ export const Register = () => {
 
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/v2/register",
+                    "http://localhost:5000/api/v1/register",
                     requestOptions
                 );
                 if (!response.ok) {
