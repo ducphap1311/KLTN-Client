@@ -1,3 +1,5 @@
+// src/components/CartItem.js
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +20,10 @@ export const CartItems = () => {
             <div className="cart-items">
                 <div className="cart-items-container">
                     <div className="cart-items-header">
-                        <h2 className="header-title">Your cart items</h2>
+                        <h2 className="header-title">Your Cart Items</h2>
                         <Link to="/products">
                             <p className="back-to-shop-link">
-                                Back to shopping
+                                Back to Shopping
                             </p>
                         </Link>
                     </div>
@@ -29,11 +31,12 @@ export const CartItems = () => {
                         <div className="title">
                             <h3 className="title-name">Product</h3>
                             <h3 className="title-price">Price</h3>
+                            <h3 className="title-size">Size</h3>
                             <h3 className="title-quantity">Quantity</h3>
                             <h3 className="title-total">Total</h3>
                         </div>
                         {cartItems.map((item, index) => {
-                            const { _id, images, name, price, amount } = item;
+                            const { _id, images, name, price, amount, size } = item;
                             return (
                                 <div key={index} className="item">
                                     <div className="item-info">
@@ -48,14 +51,14 @@ export const CartItems = () => {
                                             <div>
                                                 <Link to={`/products/${_id}`} className="product-name">
                                                     <h2 className="product-name">
-                                                        {name} Candleaf®
+                                                        {name}
                                                     </h2>
                                                 </Link>
                                                 <button
                                                     className="remove-btn"
                                                     onClick={() => {
                                                         dispatch(
-                                                            removeItem(_id)
+                                                            removeItem({ id: _id, size })
                                                         );
                                                     }}
                                                 >
@@ -64,16 +67,17 @@ export const CartItems = () => {
                                             </div>
                                             <div>
                                                 <p className="product-price">
-                                                    ${price}
+                                                    ${price.toFixed(2)}
+                                                </p>
+                                                <p className="product-size">
+                                                    Size: {size}
                                                 </p>
                                                 <div className="product-quantity">
                                                     <button
                                                         className="btn increase-btn"
                                                         onClick={() =>
                                                             dispatch(
-                                                                increaseItem(
-                                                                    _id
-                                                                )
+                                                                increaseItem({ id: _id, size })
                                                             )
                                                         }
                                                     >
@@ -84,9 +88,7 @@ export const CartItems = () => {
                                                         className="btn decrease-btn"
                                                         onClick={() =>
                                                             dispatch(
-                                                                decreaseItem(
-                                                                    _id
-                                                                )
+                                                                decreaseItem({ id: _id, size })
                                                             )
                                                         }
                                                     >
@@ -96,13 +98,14 @@ export const CartItems = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="item-price">${price}</p>
+                                    <p className="item-price">${price.toFixed(2)}</p>
+                                    <p className="item-size">{size}</p>
                                     <div className="item-quantity">
                                         <div className="quantity-container">
                                             <button
                                                 className="btn increase-btn"
                                                 onClick={() =>
-                                                    dispatch(increaseItem(_id))
+                                                    dispatch(increaseItem({ id: _id, size }))
                                                 }
                                             >
                                                 <i className="fas fa-plus"></i>
@@ -111,7 +114,7 @@ export const CartItems = () => {
                                             <button
                                                 className="btn decrease-btn"
                                                 onClick={() =>
-                                                    dispatch(decreaseItem(_id))
+                                                    dispatch(decreaseItem({ id: _id, size }))
                                                 }
                                             >
                                                 <i className="fas fa-minus"></i>
@@ -128,7 +131,8 @@ export const CartItems = () => {
                     <div className="cart-items-check-out">
                         <div className="sub-total">
                             <p className="total">
-                                <span>Sub-total</span><span className="total-number">${total.toFixed(2)}</span>
+                                <span>Sub-total:</span>
+                                <span className="total-number">${total.toFixed(2)}</span>
                             </p>
                             <p className="tax">
                                 Tax and shipping cost will be calculated later
@@ -140,7 +144,7 @@ export const CartItems = () => {
                             </Link>
                         ) : (
                             <Link to="/login" onClick={() => {
-                                localStorage.removeItem('username')
+                                localStorage.removeItem('username');
                             }}>
                                 <button>Login</button>
                             </Link>
@@ -149,7 +153,7 @@ export const CartItems = () => {
                 </div>
             </div>
         );
-    } else {
+    }else {
         return (
             <div className="empty-cart">
                 <h2>Your cart is empty</h2>
@@ -158,5 +162,5 @@ export const CartItems = () => {
                 </Link>
             </div>
         );
-    }
+    };
 };

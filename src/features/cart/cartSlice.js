@@ -1,15 +1,7 @@
+// src/features/cart/cartSlice.js
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-
-const initialState = {
-    cartItems: localStorage.getItem("cartItems")
-        ? JSON.parse(localStorage.getItem("cartItems"))
-        : [],
-    amount: 0,
-    total: 0,
-    isLoading: true,
-    data: [],
-};
 
 export const getAllProducts = createAsyncThunk(
     "cart/getAllProducts",
@@ -26,87 +18,117 @@ export const getAllProducts = createAsyncThunk(
     }
 );
 
+const initialState = {
+    cartItems: localStorage.getItem("cartItems")
+        ? JSON.parse(localStorage.getItem("cartItems"))
+        : [],
+    amount: 0,
+    total: 0,
+    isLoading: true,
+    data: [],
+};
+
 const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
         addItem: (state, action) => {
-            let flag = false;
-            const items = state.cartItems.map((item) => {
-                if (item._id === action.payload.id) {
-                    flag = true;
-                    return {
-                        ...item,
-                        amount: item.amount + action.payload.amount,
-                    };
+            const { id, amount, size } = action.payload;
+
+            const existingItem = state.cartItems.find(
+                (item) => item._id === id && item.size === size
+            );
+
+            if (existingItem) {
+                existingItem.amount += amount;
+                // Kiểm tra số lượng tối đa
+                const sizeInfo = existingItem.sizes.find(s => s.size === size);
+                if (existingItem.amount > sizeInfo.quantity) {
+                    existingItem.amount = sizeInfo.quantity;
+                    toast(`Cannot add more than ${sizeInfo.quantity} items for size ${size}`, { type: "error" });
                 }
-                return item;
-            });
-            if (flag) {
-                state.cartItems = items;
             } else {
-                const newItem = state.data.filter(
-                    (item) => item._id === action.payload.id
-                );
-                newItem[0].amount = action.payload.amount;
-                state.cartItems = [...state.cartItems, newItem[0]];
+                const newItem = state.data.find((item) => item._id === id);
+                if (newItem) {
+                    state.cartItems.push({
+                        ...newItem,
+                        amount,
+                        size
+                    });
+                }
+                toast("Added to cart successfully", {
+                type: "success",
+                draggable: false,
+            });
             }
-            state.cartItems = [...state.cartItems];
+
             localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         },
 
         removeItem: (state, action) => {
+            const { id, size } = action.payload;
             state.cartItems = state.cartItems.filter(
-                (item) => item._id !== action.payload
+                (item) => !(item._id === id && item.size === size)
             );
             localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         },
 
         decreaseItem: (state, action) => {
-            const newItems = state.cartItems
-                .map((item) => {
-                    if (item._id === action.payload) {
-                        return { ...item, amount: item.amount - 1 };
-                    }
-                    return item;
-                })
-                .filter((item) => item.amount > 0);
-            state.cartItems = newItems;
+            const { id, size } = action.payload;
+            const existingItem = state.cartItems.find(
+                (item) => item._id === id && item.size === size
+            );
+
+            if (existingItem) {
+                existingItem.amount -= 1;
+                if (existingItem.amount <= 0) {
+                    state.cartItems = state.cartItems.filter(
+                        (item) => !(item._id === id && item.size === size)
+                    );
+                }
+            }
+
             localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         },
 
         increaseItem: (state, action) => {
-            const newItems = state.cartItems.map((item) => {
-                if (item._id === action.payload) {
-                    return { ...item, amount: item.amount + 1 };
+            const { id, size } = action.payload;
+            const existingItem = state.cartItems.find(
+                (item) => item._id === id && item.size === size
+            );
+
+            if (existingItem) {
+                existingItem.amount += 1;
+                const sizeInfo = existingItem.sizes.find(s => s.size === size);
+                if (existingItem.amount > sizeInfo.quantity) {
+                    existingItem.amount = sizeInfo.quantity;
+                    toast(`Cannot add more than ${sizeInfo.quantity} items for size ${size}`, { type: "error" });
                 }
-                return item;
-            });
-            state.cartItems = newItems;
+            }
+
             localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         },
 
         getTotalAmount: (state) => {
-                let { amount, total } = state.cartItems.reduce(
-                    (a, c) => {
-                        // console.log(c);
-                        a.amount += c.amount;
-                        a.total += c.amount * c.price;
-                        return a;
-                    },
-                    { amount: 0, total: 0 }
-                );
-                state.amount = amount;
-                state.total = total;
-            
+            let { amount, total } = state.cartItems.reduce(
+                (a, c) => {
+                    a.amount += c.amount;
+                    a.total += c.amount * c.price;
+                    return a;
+                },
+                { amount: 0, total: 0 }
+            );
+            state.amount = amount;
+            state.total = total;
         },
 
         clearCart: (state) => {
-            state.cartItems = []
+            state.cartItems = [];
+            localStorage.removeItem("cartItems");
         }
     },
     extraReducers: {
-        [getAllProducts.pending]: (state) => {
+         [getAllProducts.pending]: (state) => {
             state.isLoading = true;
         },
         [getAllProducts.fulfilled]: (state, action) => {

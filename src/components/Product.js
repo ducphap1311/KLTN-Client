@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Product = ({ product }) => {
     const dispatch = useDispatch();
     const {cartItems} = useSelector(store => store.cart)
-
+    const navigate = useNavigate()
     const addToCart = async (_id, amount, totalAmount) => {
         if (totalAmount === 0) {
             toast("The product is out of stock", {
@@ -92,7 +92,7 @@ const Product = ({ product }) => {
             </p>
             <button
                 className="add-btn"
-                onClick={() => addToCart(product._id, 1, product.totalAmount)}
+                onClick={() => navigate(`/products/${product._id}`)}
             >
                 Add To Cart
             </button>
