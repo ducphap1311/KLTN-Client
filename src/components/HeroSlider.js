@@ -33,11 +33,10 @@ export const HeroSlider = () => {
                 <div className="slider-child">
                     <img src="https://image.cnbcfm.com/api/v1/image/107026926-1646748261658-2-lululemon_Footwear__Collection1.jpg?v=1646750941" alt="slider 1" className="slider-img" />
                     <div className="slider-text">
-                        <h1 className="title">Mona Watch</h1>
+                        <h1 className="title">BShoes</h1>
                         <p className="info">
                             Along with the continuous development of world
-                            fashion, many brands have launched genuine men's
-                            watches with a variety of styles, designs, colors,
+                            fashion, many brands have launched genuine shoes with a variety of styles, designs, colors,
                             sizes...
                         </p>
                         <Link to='/products'>

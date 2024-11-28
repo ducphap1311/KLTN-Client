@@ -17,6 +17,7 @@ import { OrderDetailPage } from "./pages/OrderDetailPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import VerifyEmail from "./pages/VerifyEmail";
+import RegisterVerification from "./pages/RegisterVerification"
 
 function App() {
     const dispatch = useDispatch()
@@ -51,6 +52,7 @@ function App() {
             <Route path="/reset-password/:id" element={<ResetPasswordPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/verify-email/message" element={<RegisterVerification />} />
         </Routes>
     );
 }
