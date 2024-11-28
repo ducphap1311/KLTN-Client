@@ -229,13 +229,13 @@ export const CheckOut = () => {
     );
   }
   return (
-    <div className="checkout">
+    <div className="checkout mt-36">
       <div className="checkout-title">
-        <h2>Place Your Order</h2>
+        <h2 className="text-2xl">Place Your Order</h2>
       </div>
       <div className="checkout-information-container">
         <div className="checkout-information">
-          <p>Shipping Information</p>
+          {/* <p className="text-xl">Shipping Information</p> */}
           <form onSubmit={formik.handleSubmit}>
             <div className="name-information">
               <label>Your Name</label>
@@ -358,14 +358,14 @@ export const CheckOut = () => {
                 }}
               />
             }
-            <h2 className="text-lg font-medium text-gray-900 mb-4">
+            <h2 className="text-base font-medium text-gray-900 mb-4">
               Choose payment method
             </h2>
             <div className="space-y-4">
               {paymentMethods.map((method) => (
                 <label
                   key={method.id}
-                  className={`flex items-center justify-between w-full p-4 border-2 rounded-lg cursor-pointer transition-colors ${
+                  className={`flex items-center justify-between w-full p-2 border-2 rounded-lg cursor-pointer transition-colors ${
                     selectedPayment === method.id
                       ? "bg-blue-50 border-blue-500"
                       : "bg-white border-gray-300 hover:bg-gray-50"
@@ -394,12 +394,6 @@ export const CheckOut = () => {
                 </label>
               ))}
             </div>
-            <p className="mt-4 text-sm text-gray-500">
-              Selected payment method:{" "}
-              <span className="font-medium text-gray-900">
-                {selectedPayment === "cash" ? "Cash" : "PayPal"}
-              </span>
-            </p>
           </div>
         </div>
       </div>

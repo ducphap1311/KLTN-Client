@@ -42,7 +42,57 @@ export const OrderDetail = () => {
         year: "numeric",
     })}`;
 
+    // Columns for the table
     const columns = [
+        {
+            title: "Info Type",
+            dataIndex: "infoType",
+            key: "infoType",
+            render: (text) => <span className="font-medium text-gray-700">{text}</span>,
+        },
+        {
+            title: "Details",
+            dataIndex: "details",
+            key: "details",
+            render: (text) => <span className="text-gray-600">{text}</span>,
+        },
+    ];
+
+    // DataSource for the table
+    const dataSource = [
+        {
+            key: "1",
+            infoType: "Name",
+            details: order.name,
+        },
+        {
+            key: "2",
+            infoType: "Address",
+            details: order.address,
+        },
+        {
+            key: "3",
+            infoType: "Date",
+            details: formattedTime,
+        },
+        {
+            key: "6",
+            infoType: "Shipping",
+            details: "5$"
+        },
+        {
+            key: "4",
+            infoType: "Order Total",
+            details: `$${order.orderTotal.toFixed(2)}`,
+        },
+        {
+            key: "5",
+            infoType: "Status",
+            details: <span className="text-green-600">Shipping</span>,
+        },
+    ];
+
+    const productColumns = [
         {
             title: "Products",
             dataIndex: "product",
@@ -74,6 +124,13 @@ export const OrderDetail = () => {
             ),
         },
         {
+            title: "Size",
+            dataIndex: "size",
+            key: "size",
+            align: "center",
+            render: (size) => <span className="text-gray-700">{size}</span>,
+        },
+        {
             title: "Amount",
             dataIndex: "amount",
             key: "amount",
@@ -86,16 +143,16 @@ export const OrderDetail = () => {
             render: (price) => `$${price.toFixed(2)}`,
             align: "right",
         },
-        {
-            title: "Total Price",
-            dataIndex: "totalPrice",
-            key: "totalPrice",
-            render: (_, record) => `$${(record.price * record.amount).toFixed(2)}`,
-            align: "right",
-        },
+        // {
+        //     title: "Total Price",
+        //     dataIndex: "totalPrice",
+        //     key: "totalPrice",
+        //     render: (_, record) => `$${(record.price * record.amount).toFixed(2)}`,
+        //     align: "right",
+        // },
     ];
 
-    const dataSource = order.cartItems.map((item) => ({
+    const productDataSource = order.cartItems.map((item) => ({
         key: item._id,
         ...item,
     }));
@@ -116,37 +173,27 @@ export const OrderDetail = () => {
                 </div>
                 <div className="mb-6">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                        Shipping Information
+                        General Information
                     </h3>
-                    <ul className="space-y-2 text-gray-700 text-sm">
-                        <li>
-                            <span className="font-medium">Name: </span>
-                            {order.name}
-                        </li>
-                        <li>
-                            <span className="font-medium">Address: </span>
-                            {order.address}
-                        </li>
-                        <li>
-                            <span className="font-medium">Date: </span>
-                            {formattedTime}
-                        </li>
-                        <li>
-                            <span className="font-medium">Order Total: </span>
-                            ${order.orderTotal.toFixed(2)}
-                        </li>
-                        <li>
-                            <span className="font-medium">Status: </span>
-                            <span className="text-green-600">Shipping</span>
-                        </li>
-                    </ul>
+                    <Table
+                        dataSource={dataSource}
+                        columns={columns}
+                        pagination={false}
+                        bordered
+                        className="mb-6"
+                    />
                 </div>
-                <Table
-                    dataSource={dataSource}
-                    columns={columns}
-                    pagination={false}
-                    className="order-items-table"
-                />
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                        Products
+                    </h3>
+                    <Table
+                        dataSource={productDataSource}
+                        columns={productColumns}
+                        pagination={false}
+                        scroll={{ x: "1000px" }} // Enable horizontal scroll
+                    />
+                </div>
             </div>
         </div>
     );

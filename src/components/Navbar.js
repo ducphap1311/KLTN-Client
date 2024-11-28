@@ -60,7 +60,7 @@ export const Navbar = () => {
                         className="menu-btn"
                         onClick={() => setShowSidebar(true)}
                     >
-                        <i className="fa-solid fa-bars"></i>
+                        <i className="fa-solid fa-bars text-black"></i>
                     </button>
                 </div>
                 <div className="navbar-logo-container">
