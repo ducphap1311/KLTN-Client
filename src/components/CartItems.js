@@ -1,166 +1,175 @@
-// src/components/CartItem.js
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Table, Button } from "antd";
 import {
     increaseItem,
     decreaseItem,
     removeItem,
 } from "../features/cart/cartSlice";
-import "../styles/CartItems.scss";
 
 export const CartItems = () => {
     const dispatch = useDispatch();
     const { total, cartItems } = useSelector((store) => store.cart);
     const token = localStorage.getItem("token");
 
-    if (cartItems.length !== 0) {
+    if (cartItems.length === 0) {
         return (
-            <div className="cart-items">
-                <div className="cart-items-container">
-                    <div className="cart-items-header">
-                        <h2 className="header-title">Your Cart Items</h2>
-                        <Link to="/products">
-                            <p className="back-to-shop-link">
-                                Back to Shopping
-                            </p>
+            <div className="container mx-auto px-4 py-8 mt-32">
+                <div className="text-center">
+                    <h2 className="text-4xl font-semibold text-gray-800">
+                        Your cart is empty
+                    </h2>
+                    <Link
+                        to="/products"
+                        className="text-white bg-blue-600 mt-4 inline-block rounded-md px-5 py-2 text-xl hover:bg-blue-700"
+                    >
+                        Fill it
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    const columns = [
+        {
+            title: "Product",
+            dataIndex: "product",
+            key: "product",
+            render: (text, record) => (
+                <div className="flex items-center space-x-4">
+                    <Link to={`/products/${record._id}`}>
+                        <img
+                            src={record.images[0]}
+                            alt={record.name}
+                            className="w-16 h-16 object-cover rounded-md border"
+                        />
+                    </Link>
+                    <div>
+                        <Link
+                            to={`/products/${record._id}`}
+                            className="font-medium text-gray-700 hover:text-blue-600"
+                        >
+                            {record.name}
                         </Link>
+                        <button
+                            onClick={() =>
+                                dispatch(removeItem({ id: record._id, size: record.size }))
+                            }
+                            className="block text-sm text-red-500 hover:underline mt-1"
+                        >
+                            Remove
+                        </button>
                     </div>
-                    <div className="cart-items-list">
-                        <div className="title">
-                            <h3 className="title-name">Product</h3>
-                            <h3 className="title-price">Price</h3>
-                            <h3 className="title-size">Size</h3>
-                            <h3 className="title-quantity">Quantity</h3>
-                            <h3 className="title-total">Total</h3>
-                        </div>
-                        {cartItems.map((item, index) => {
-                            const { _id, images, name, price, amount, size } = item;
-                            return (
-                                <div key={index} className="item">
-                                    <div className="item-info">
-                                        <Link to={`/products/${_id}`}>
-                                            <img
-                                                src={images[0]}
-                                                alt="img"
-                                                className="product-img"
-                                            />
-                                        </Link>
-                                        <div className="product-info1">
-                                            <div>
-                                                <Link to={`/products/${_id}`} className="product-name">
-                                                    <h2 className="product-name">
-                                                        {name}
-                                                    </h2>
-                                                </Link>
-                                                <button
-                                                    className="remove-btn"
-                                                    onClick={() => {
-                                                        dispatch(
-                                                            removeItem({ id: _id, size })
-                                                        );
-                                                    }}
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <p className="product-price">
-                                                    ${price.toFixed(2)}
-                                                </p>
-                                                <p className="product-size">
-                                                    Size: {size}
-                                                </p>
-                                                <div className="product-quantity">
-                                                    <button
-                                                        className="btn increase-btn"
-                                                        onClick={() =>
-                                                            dispatch(
-                                                                increaseItem({ id: _id, size })
-                                                            )
-                                                        }
-                                                    >
-                                                        <i className="fas fa-plus"></i>
-                                                    </button>
-                                                    <span>{amount}</span>
-                                                    <button
-                                                        className="btn decrease-btn"
-                                                        onClick={() =>
-                                                            dispatch(
-                                                                decreaseItem({ id: _id, size })
-                                                            )
-                                                        }
-                                                    >
-                                                        <i className="fas fa-minus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="item-price">${price.toFixed(2)}</p>
-                                    <p className="item-size">{size}</p>
-                                    <div className="item-quantity">
-                                        <div className="quantity-container">
-                                            <button
-                                                className="btn increase-btn"
-                                                onClick={() =>
-                                                    dispatch(increaseItem({ id: _id, size }))
-                                                }
-                                            >
-                                                <i className="fas fa-plus"></i>
-                                            </button>
-                                            <span>{amount}</span>
-                                            <button
-                                                className="btn decrease-btn"
-                                                onClick={() =>
-                                                    dispatch(decreaseItem({ id: _id, size }))
-                                                }
-                                            >
-                                                <i className="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <p className="item-total">
-                                        ${(price * amount).toFixed(2)}
-                                    </p>
-                                </div>
-                            );
-                        })}
+                </div>
+            ),
+        },
+        {
+            title: "Price",
+            dataIndex: "price",
+            key: "price",
+            render: (price) => `$${price.toFixed(2)}`,
+        },
+        {
+            title: "Size",
+            dataIndex: "size",
+            key: "size",
+        },
+        {
+            title: "Quantity",
+            dataIndex: "amount",
+            key: "amount",
+            render: (amount, record) => (
+                <div className="flex items-center space-x-2">
+                    <Button
+                        size="small"
+                        onClick={() =>
+                            dispatch(increaseItem({ id: record._id, size: record.size }))
+                        }
+                    >
+                        +
+                    </Button>
+                    <span>{amount}</span>
+                    <Button
+                        size="small"
+                        onClick={() =>
+                            dispatch(decreaseItem({ id: record._id, size: record.size }))
+                        }
+                    >
+                        -
+                    </Button>
+                </div>
+            ),
+        },
+        {
+            title: "Total",
+            dataIndex: "total",
+            key: "total",
+            render: (text, record) => `$${(record.price * record.amount).toFixed(2)}`,
+        },
+    ];
+
+    const dataSource = cartItems.map((item) => ({
+        key: item._id,
+        ...item,
+    }));
+
+    return (
+        <div className="container mx-auto px-4 py-8 mt-24 max-w-[1200px]">
+            <div className="bg-white rounded-lg p-6">
+                <div className="flex items-center justify-between border-b pb-4 mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-800">
+                        Your Cart Items
+                    </h2>
+                    <Link
+                        to="/products"
+                        className="text-blue-600 hover:underline font-medium"
+                    >
+                        Back to Shopping
+                    </Link>
+                </div>
+
+                <Table
+                    dataSource={dataSource}
+                    columns={columns}
+                    pagination={false}
+                    className="cart-items-table"
+                />
+
+                <div className="mt-6 flex flex-col md:flex-row md:justify-between md:items-center">
+                    <div className="text-lg text-gray-800 font-medium">
+                        <p>
+                            Sub-total:{" "}
+                            <span className="text-blue-600 font-semibold">
+                                ${total.toFixed(2)}
+                            </span>
+                        </p>
+                        <p className="text-sm text-gray-500">
+                            Tax and shipping costs will be calculated later.
+                        </p>
                     </div>
-                    <div className="cart-items-check-out">
-                        <div className="sub-total">
-                            <p className="total">
-                                <span>Sub-total:</span>
-                                <span className="total-number">${total.toFixed(2)}</span>
-                            </p>
-                            <p className="tax">
-                                Tax and shipping cost will be calculated later
-                            </p>
-                        </div>
+                    <div className="mt-4 md:mt-0">
                         {token ? (
                             <Link to="/checkout">
-                                <button>Check-out</button>
+                                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+                                    Check-out
+                                </button>
                             </Link>
                         ) : (
-                            <Link to="/login" onClick={() => {
-                                localStorage.removeItem('username');
-                            }}>
-                                <button>Login</button>
+                            <Link
+                                to="/login"
+                                onClick={() => {
+                                    localStorage.removeItem("username");
+                                }}
+                            >
+                                <button className="px-6 py-2 bg-gray-600 text-white rounded-lg shadow hover:bg-gray-700">
+                                    Login
+                                </button>
                             </Link>
                         )}
                     </div>
                 </div>
             </div>
-        );
-    }else {
-        return (
-            <div className="empty-cart">
-                <h2>Your cart is empty</h2>
-                <Link to="/products" className="fill-link">
-                    Fill it
-                </Link>
-            </div>
-        );
-    };
+        </div>
+    );
 };

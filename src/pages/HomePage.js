@@ -72,7 +72,7 @@ export const HomePage = () => {
                   </p>
                 </div>
               </div>
-              <div className="space-y-4 mt-8">
+              <div className="space-y-4">
                 <div className="bg-white p-6 rounded-lg shadow-md">
                   <h3 className="font-semibold text-lg mb-2">Wide Selection</h3>
                   <p className="text-gray-600">

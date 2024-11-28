@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import "../styles/Orders.scss";
+import { Table } from "antd";
 import { Loading } from "./Loading";
-import { Order } from "./Order";
 import { Link } from "react-router-dom";
 
 export const Orders = () => {
-    const [orders, setOrders] = useState();
+    const [orders, setOrders] = useState([]); // Sử dụng giá trị mặc định là mảng rỗng
     const [isLoading, setIsLoading] = useState(true);
     const [errorUser, setErrorUser] = useState(false);
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        if(!token) {
-            setIsLoading(false)
+        if (!token) {
+            setIsLoading(false);
             return;
-        };
+        }
         getOrders();
     }, []);
 
@@ -30,19 +29,15 @@ export const Orders = () => {
                 "http://localhost:5000/api/v1/orders",
                 requestOptions
             );
+
             const responseData = await response.json();
-            const data = responseData.orders;
-            if(!data){
-                throw new Error("Invalid user");
-            }
-            if (data.length === 0) {
-                setIsLoading(false);
-                return;
-            }
+            const data = responseData.orders || []; // Đảm bảo `data` là mảng rỗng nếu không có dữ liệu
+
             setOrders(data);
             setErrorUser(false);
-            setIsLoading(false)
+            setIsLoading(false);
         } catch (error) {
+            console.error("Error fetching orders:", error);
             setIsLoading(false);
             setErrorUser(true);
         }
@@ -50,49 +45,144 @@ export const Orders = () => {
 
     if (isLoading) {
         return <Loading />;
-    } else if (!token || errorUser) {
+    }
+
+    if (!token || errorUser) {
         return (
-            <div className="login-to-continue">
-                <p>Please login to continue</p>
-                <Link to="/login" className="login-link">
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+                <p className="text-gray-800 text-lg">Please login to continue</p>
+                <Link
+                    to="/login"
+                    className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
                     Login here
                 </Link>
             </div>
         );
-    } else if (!orders) {
-        return <h2 className="make-order">Please Make An Order</h2>;
-    } else
+    }
+
+    if (!orders.length) { // Kiểm tra nếu orders rỗng
         return (
-            <div className="orders">
-                <div className="orders-title">
-                    <h2>Your Orders</h2>
-                </div>
-                <div className="orders-information">
-                    <div className="total-orders">
-                        <p>Total Orders: </p>
-                        <span>{orders.length}</span>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="orders-list">
-                            <thead>
-                                <tr>
-                                    <th>Customer</th>
-                                    <th>Address</th>
-                                    <th>Products</th>
-                                    <th>Cost</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders.map((order) => {
-                                    return <Order key={order._id} {...order} />;
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div className="flex items-center justify-center min-h-screen bg-gray-100 mt-32">
+                <h2 className="text-2xl font-semibold text-gray-800">
+                    Please Make An Order
+                </h2>
             </div>
         );
+    }
+
+    const columns = [
+        {
+            title: "Customer",
+            dataIndex: "customerName",
+            key: "customerName",
+            width: 150
+        },
+        {
+            title: "Address",
+            dataIndex: "address",
+            key: "address",
+            width: 500,
+            
+        },
+        {
+            title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+            render: (amount) => `${amount} items`,
+            width: 150
+        },
+        {
+            title: "Cost",
+            dataIndex: "orderTotal",
+            key: "orderTotal",
+            render: (orderTotal) => `$${orderTotal.toFixed(2)}`,
+            width: 150
+        },
+        {
+            title: "Date",
+            dataIndex: "createdAt",
+            width: 150,
+            key: "createdAt",
+            render: (createdAt) => {
+                const date = new Date(createdAt);
+                const day = date.getDate();
+                const monthNames = [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                ];
+                const month = monthNames[date.getMonth()];
+                const year = date.getFullYear();
+                return `${month} ${day}, ${year}`;
+            },
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            width: 150,
+            key: "status",
+            render: (status) => (
+                <span
+                    className={`px-2 py-1 rounded ${
+                        status === "Completed"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-yellow-100 text-yellow-700"
+                    }`}
+                >
+                    {status}
+                </span>
+            ),
+        },
+        {
+            title: "Detail",
+            width: 150,
+            key: "detail",
+            render: (text, record) => (
+                <Link
+                    to={`/orders/${record.key}`}
+                    className="text-blue-600 hover:underline"
+                >
+                    View Detail
+                </Link>
+            ),
+        },
+    ];
+
+    const dataSource = orders.map((order) => ({
+        key: order._id,
+        customerName: order.name || "Unknown",
+        address: order.address || "No Address",
+        amount: order.amount || 0,
+        orderTotal: order.orderTotal || 0,
+        createdAt: order.createdAt,
+        status: order.status || "Pending",
+    }));
+    
+    return (
+        <div className="container mx-auto px-4 py-8 mt-32">
+            <div className="bg-white rounded-lg p-6">
+                <div className="border-b pb-4 mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-800">
+                        Your Orders
+                    </h2>
+                </div>
+                <Table
+                    dataSource={dataSource}
+                    columns={columns}
+                    pagination={{ pageSize: 5 }}
+                    className="orders-table"
+                />
+            </div>
+        </div>
+    );
 };
