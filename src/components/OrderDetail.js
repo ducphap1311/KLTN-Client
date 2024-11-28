@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "../styles/OrderDetail.scss";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { Table } from "antd";
 import { Loading } from "./Loading";
-import { Link } from "react-router-dom";
 
 export const OrderDetail = () => {
     const { id } = useParams();
@@ -27,121 +26,128 @@ export const OrderDetail = () => {
             setOrder();
         }
     };
+
     if (!order) {
         return <Loading />;
-    } else {
-        const date = new Date(order.createdAt);
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const day = date.getDate();
-        const monthNames = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-        ];
-        const month = monthNames[date.getMonth()];
-        const year = date.getFullYear();
-        const formattedTime = `${hours % 12}:${String(minutes).padStart(
-            2,
-            "0"
-        )} ${hours >= 12 ? "pm" : "am"} - ${month} ${day}th, ${year}`;
-        return (
-            <div className="order-detail">
-                <h2 className="order-detail-title">Your order informations</h2>
-                <Link to="/orders" className="back-orders-link">
-                    Back to orders
-                </Link>
-                <div className="detail-container">
-                    <div className="shipping-informations">
-                        <h3>Shipping Informations</h3>
-                        <p>
-                            <span>Name: </span>
-                            {order.name}
-                        </p>
-                        <p>
-                            <span>Address: </span>
-                            {order.address}
-                        </p>
-                        <p>
-                            <span>Date: </span>
-                            {formattedTime}
-                        </p>
-                        <p>
-                            <span>Order total: </span>$
-                            {order.orderTotal.toFixed(2)}
-                        </p>
-                        <p>
-                            <span>Status: </span>Shipping
-                        </p>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="order-info">
-                            <thead>
-                                <tr>
-                                    <th>Products</th>
-                                    <th>Category</th>
-                                    <th>Amount</th>
-                                    <th>Price</th>
-                                    <th>Total price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {order.cartItems.map((item) => {
-                                    const {
-                                        images,
-                                        name,
-                                        amount,
-                                        price,
-                                        category,
-                                    } = item;
-                                    return (
-                                        <tr key={item._id}>
-                                            <td className="products-info">
-                                                <Link
-                                                    to={`/products/${item._id}`}
-                                                >
-                                                    <img
-                                                        src={images[0]}
-                                                        alt="product-img"
-                                                        className="product-img"
-                                                    />
-                                                </Link>
-                                                <Link
-                                                    to={`/products/${item._id}`}
-                                                    className="product-name"
-                                                >
-                                                    <p>{name}</p>
-                                                </Link>
-                                            </td>
-                                            <td
-                                                style={{
-                                                    textTransform: "capitalize",
-                                                }}
-                                            >
-                                                {category}
-                                            </td>
-                                            <td>{amount}</td>
-                                            <td>${price}</td>
-                                            <td>
-                                                ${(price * amount).toFixed(2)}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        );
     }
+
+    const date = new Date(order.createdAt);
+    const formattedTime = `${date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    })} - ${date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+    })}`;
+
+    const columns = [
+        {
+            title: "Products",
+            dataIndex: "product",
+            key: "product",
+            render: (_, record) => (
+                <div className="flex items-center space-x-4">
+                    <Link to={`/products/${record._id}`}>
+                        <img
+                            src={record.images[0]}
+                            alt={record.name}
+                            className="w-16 h-16 object-cover rounded-md"
+                        />
+                    </Link>
+                    <Link
+                        to={`/products/${record._id}`}
+                        className="font-medium text-gray-700 hover:text-blue-600"
+                    >
+                        {record.name}
+                    </Link>
+                </div>
+            ),
+        },
+        {
+            title: "Category",
+            dataIndex: "category",
+            key: "category",
+            render: (text) => (
+                <span className="capitalize text-gray-600">{text}</span>
+            ),
+        },
+        {
+            title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+            align: "center",
+        },
+        {
+            title: "Price",
+            dataIndex: "price",
+            key: "price",
+            render: (price) => `$${price.toFixed(2)}`,
+            align: "right",
+        },
+        {
+            title: "Total Price",
+            dataIndex: "totalPrice",
+            key: "totalPrice",
+            render: (_, record) => `$${(record.price * record.amount).toFixed(2)}`,
+            align: "right",
+        },
+    ];
+
+    const dataSource = order.cartItems.map((item) => ({
+        key: item._id,
+        ...item,
+    }));
+
+    return (
+        <div className="container mx-auto px-4 py-8 max-w-[1200px]">
+            <div className="bg-white rounded-lg p-6">
+                <div className="mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                        Your Order Information
+                    </h2>
+                    <Link
+                        to="/orders"
+                        className="text-blue-600 hover:underline text-sm"
+                    >
+                        Back to orders
+                    </Link>
+                </div>
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                        Shipping Information
+                    </h3>
+                    <ul className="space-y-2 text-gray-700 text-sm">
+                        <li>
+                            <span className="font-medium">Name: </span>
+                            {order.name}
+                        </li>
+                        <li>
+                            <span className="font-medium">Address: </span>
+                            {order.address}
+                        </li>
+                        <li>
+                            <span className="font-medium">Date: </span>
+                            {formattedTime}
+                        </li>
+                        <li>
+                            <span className="font-medium">Order Total: </span>
+                            ${order.orderTotal.toFixed(2)}
+                        </li>
+                        <li>
+                            <span className="font-medium">Status: </span>
+                            <span className="text-green-600">Shipping</span>
+                        </li>
+                    </ul>
+                </div>
+                <Table
+                    dataSource={dataSource}
+                    columns={columns}
+                    pagination={false}
+                    className="order-items-table"
+                />
+            </div>
+        </div>
+    );
 };

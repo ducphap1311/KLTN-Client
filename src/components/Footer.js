@@ -1,84 +1,108 @@
 import React from "react";
-import footerImg from "../assets/logo.png";
-import "../styles/Footer.scss";
+import { Link } from "react-router-dom";
+import { FacebookOutlined, InstagramOutlined } from "@ant-design/icons";
 
 export const Footer = () => {
     return (
-        <div className="footer">
-            <div className="footer-container">
-                <div className="footer-underline"></div>
-                <div className="footer-info">
-                    <div className="footer-header">
-                        <div className="footer-header-logo">
-                            <img
-                                src={footerImg}
-                                alt="footer-logo"
-                                className="footer-header-img"
-                            />
-                        </div>
-                        <p className="footer-header-subtitle">
-                            Your satisfaction is our honor.
+        <footer className="bg-gray-900 text-gray-300">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="flex justify-between gap-8">
+                    {/* Logo and About Us */}
+                    <div className="max-w-[300px]">
+                        <img
+                            src={require("../assets/logo.png")}
+                            alt="Company Logo"
+                            className="w-32 mb-4"
+                        />
+                        <p className="text-base leading-relaxed">
+                            We provide high-quality sports shoes that bring comfort and style to our customers.
                         </p>
                     </div>
-                    <div className="contact-info">
-                        <h4>CONTACT INFO</h4>
-                        <div className="info">
-                            <p>
-                                <i className="fa fa-map-marker"></i>District 9,
-                                Ho Chi Minh City
-                            </p>
-                            <p>
-                                <i className="fa fa-phone"></i>0825 820 709
-                            </p>
-                            <p>
-                                <i className="fa fa-envelope"></i>
-                                hophap1311@gmail.com
-                            </p>
-                        </div>
-                    </div>
-                    <div className="about-us">
-                        <h4>ABOUT US</h4>
-                        <div className="info">
-                            <p>
-                                <i className="fa fa-arrow-right"></i>About Mona
-                            </p>
-                            <p>
-                                <i className="fa fa-arrow-right"></i>Mona
-                                Devices
-                            </p>
-                            <p>
-                                <i className="fa fa-arrow-right"></i>Mona
-                                Science
-                            </p>
-                        </div>
-                    </div>
-                    <div className="connect-with-us">
-                        <h4>CONNECT WITH US</h4>
-                        <div className="info">
-                            <p>
-                                <a
-                                    href="https://www.facebook.com/ducphap1311"
-                                    target="_blank"
-                                    rel="noreferrer"
+
+                    {/* Quick Links */}
+                    <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">
+                            Quick Links
+                        </h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    to="/"
+                                    className="text-base hover:text-white transition-colors"
                                 >
-                                    <i className="fab fa-facebook"></i>
-                                    <span>FaceBook</span>
-                                </a>
-                            </p>
-                            <p>
-                                <a
-                                    href="https://www.instagram.com/ducphapho/"
-                                    target="_blank"
-                                    rel="noreferrer"
+                                    Home
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/products"
+                                    className="text-base hover:text-white transition-colors"
                                 >
-                                    <i className="fab fa-instagram"></i>
-                                    <span>Instagram</span>
-                                </a>
-                            </p>
+                                    Products
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/about"
+                                    className="text-base hover:text-white transition-colors"
+                                >
+                                    About Us
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/contact"
+                                    className="text-base hover:text-white transition-colors"
+                                >
+                                    Contact
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Contact Information */}
+                    <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">
+                            Contact Information
+                        </h3>
+                        <ul className="space-y-2 text-base">
+                            <li>District 9, Ho Chi Minh City</li>
+                            <li>0825 820 709</li>
+                            <li>hophap1311@gmail.com</li>
+                        </ul>
+                    </div>
+
+                    {/* Follow Us */}
+                    <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">
+                            Follow Us
+                        </h3>
+                        <div className="flex space-x-4 text-xl">
+                            <a
+                                href="#"
+                                className="text-gray-400 hover:text-white transition-colors"
+                                aria-label="Facebook"
+                            >
+                                <FacebookOutlined />
+                            </a>
+                            <a
+                                href="#"
+                                className="text-gray-400 hover:text-white transition-colors"
+                                aria-label="Instagram"
+                            >
+                                <InstagramOutlined />
+                            </a>
                         </div>
                     </div>
                 </div>
+
+                {/* Footer Bottom */}
+                <div className="mt-8 pt-8 border-t border-gray-700 text-sm text-center">
+                    <p className="text-gray-500">
+                        &copy; 2024 Your Company Name. All rights reserved.
+                    </p>
+                </div>
             </div>
-        </div>
+        </footer>
     );
 };

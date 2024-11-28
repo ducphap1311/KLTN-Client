@@ -77,6 +77,7 @@ const Product = ({ product }) => {
     };
 
     return (
+        <Link to={`/products/${product._id}`}>
         <div key={product._id} className="product-info">
             <Link to={`/products/${product._id}`}>
                 <img
@@ -97,6 +98,7 @@ const Product = ({ product }) => {
                 Add To Cart
             </button>
         </div>
+        </Link>
     );
 };
 
