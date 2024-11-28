@@ -216,13 +216,13 @@ const Login = () => {
                     {emailStatus === "rejected" ? (
                         <p className="email-rejected">User does not exist</p>
                     ) : emailStatus === "fulfilled" ? (
-                        <p className="email-fulfilled text-[#ff0073]">
+                        <p className="email-fulfilled text-[#354acf]">
                             Please check your email and reset your password
                         </p>
                     ) : emailStatus === "pending" ? (
                         <Spin className="block" size="default" indicator={<LoadingOutlined className="text-[#ff0073]" spin />} />
                     ) : null}
-                    <Button disabled={!email} onClick={checkEmailFunction} className="bg-[#ff0073] px-10 py-5 text-base mx-auto w-fit text-white hover:text-white disabled:hover:bg-[#ff0073]">
+                    <Button disabled={!email} onClick={checkEmailFunction} className="bg-[#354acf] px-10 py-5 text-base mx-auto w-fit text-white hover:text-white disabled:hover:bg-[#0022ff]">
                         Search
                     </Button>
                 </div>
