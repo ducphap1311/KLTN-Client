@@ -4,28 +4,28 @@ import aboutImg from "../assets/about-us.jpg";
 
 export const About = () => {
     return (
-        <div className="about">
+        <div className="about pt-28">
             <div className="about-container">
-                <div className="about-header">
+                <div className="about-header about-header grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div className="about-img-container">
                         <img
-                            src={aboutImg}
-                            alt="about-img"
-                            className="about-img"
-                        />
+                        src="https://drake.vn/image/catalog/H%C3%ACnh%20content/gia%CC%80y%20Converse%20da%20bo%CC%81ng/giay-converse-da-bong-5.jpg"
+                        alt="about-img"
+                        className="about-img w-full rounded-lg shadow-md"
+                    />
                     </div>
                     <div className="about-text">
-                        <h2 className="title">About Watch Mona</h2>
+                        <h2 className="title">About BShoes</h2>
                         <p className="info">
-                            "Along with the continuous development of world
-                            fashion, many brands have launched genuine men's
-                            watches with a variety of styles, designs, colors,
-                            sizes... A key high-end men's watch The brand
-                            portrays a true value when it comes to luxury
-                            accessories for men. Nowadays, watches are essential
-                            fashion accessories for today's modern man. On the
-                            wrists of successful men there is always a place for
-                            a high-end men's watch"
+                            "With the continuous evolution of global fashion, 
+                            sneakers have become essential footwear for everyone. 
+                            At BShoes, we provide high-quality sneakers 
+                            that combine comfort, durability, and cutting-edge style. 
+                            Whether you're running errands, working out, or making a 
+                            fashion statement, the right pair of sneakers completes 
+                            your look and enhances your lifestyle. Modern sneakers 
+                            are no longer just footwear—they're an expression of 
+                            personality and functionality."
                         </p>
                     </div>
                 </div>
@@ -37,10 +37,10 @@ export const About = () => {
                             className="genuine-img"
                         />
                         <div className="genuine-text">
-                            <h3>Genuine</h3>
+                            <h3>Authenticity Guaranteed</h3>
                             <p>
-                                Nowadays, watches are essential fashion
-                                accessories for today's modern man
+                                Our sneakers are 100% authentic and sourced directly 
+                                from top brands around the world.
                             </p>
                         </div>
                     </div>
@@ -51,10 +51,10 @@ export const About = () => {
                             className="new-img"
                         />
                         <div className="new-text">
-                            <h3>100% new product</h3>
+                            <h3>Brand New Products</h3>
                             <p>
-                                Nowadays, watches are essential fashion
-                                accessories for today's modern man
+                                Every pair of sneakers we offer is brand new, ensuring 
+                                you get the best quality.
                             </p>
                         </div>
                     </div>
@@ -65,10 +65,10 @@ export const About = () => {
                             className="guarantee-img"
                         />
                         <div className="guarantee-text">
-                            <h3>Warranty 12 months</h3>
+                            <h3>12-Month Warranty</h3>
                             <p>
-                                Nowadays, watches are essential fashion
-                                accessories for today's modern man
+                                Our sneakers come with a 12-month warranty, giving 
+                                you peace of mind with every purchase.
                             </p>
                         </div>
                     </div>
@@ -79,10 +79,10 @@ export const About = () => {
                             className="exchange-img"
                         />
                         <div className="exchange-text">
-                            <h3>Return within 7 days</h3>
+                            <h3>7-Day Returns</h3>
                             <p>
-                                Nowadays, watches are essential fashion
-                                accessories for today's modern man
+                                If you're not satisfied with your purchase, you can 
+                                return it within 7 days for an exchange or refund.
                             </p>
                         </div>
                     </div>
@@ -93,23 +93,24 @@ export const About = () => {
                             className="freeship-img"
                         />
                         <div className="freeship-text">
-                            <h3>Free ship</h3>
+                            <h3>Free Shipping</h3>
                             <p>
-                                Nowadays, watches are essential fashion
-                                accessories for today's modern man
+                                Enjoy free shipping on all orders, delivered straight 
+                                to your doorstep.
                             </p>
                         </div>
                     </div>
                     <div className="price">
                         <img
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO3elPSNYF3mtdaaUJpYduzOIxSJjuB-c5PuXZ9D1jh5nIfUtu"
+                            alt="price-img"
                             className="price-img"
                         />
                         <div className="price-text">
-                            <h3>Good price</h3>
+                            <h3>Best Prices</h3>
                             <p>
-                                Nowadays, watches are essential fashion
-                                accessories for today's modern man
+                                Get the best prices for high-quality sneakers without 
+                                compromising on style or comfort.
                             </p>
                         </div>
                     </div>

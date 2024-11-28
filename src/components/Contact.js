@@ -1,25 +1,26 @@
-import React, { useState } from "react";
-import "../styles/Contact.scss";
+import React from "react";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Input, Button, Card } from "antd";
+import { PhoneOutlined, MailOutlined, EnvironmentOutlined } from "@ant-design/icons";
 
 export const Contact = () => {
     const formik = useFormik({
         initialValues: {
-            name: '',
-            email: '',
-            phoneNumber: '',
-            location: '',
-            message: '',
+            name: "",
+            email: "",
+            phoneNumber: "",
+            location: "",
+            message: "",
         },
         validationSchema: Yup.object({
             name: Yup.string().required("Please provide your name"),
             email: Yup.string()
                 .required("Please provide your mail")
-                .email("Please provide valid email"),
+                .email("Please provide a valid email"),
             phoneNumber: Yup.string()
-                .min(10, "Please provide valid phone number")
+                .min(10, "Please provide a valid phone number")
                 .required("Please provide your phone number"),
             location: Yup.string().required("Please provide your location"),
             message: Yup.string().required("Please provide your message"),
@@ -31,7 +32,7 @@ export const Contact = () => {
                 body: JSON.stringify({
                     name: values.name,
                     email: values.email,
-                    phonenumber: Number(values.phoneNumber),
+                    phoneNumber: Number(values.phoneNumber),
                     location: values.location,
                     message: values.message,
                 }),
@@ -39,120 +40,139 @@ export const Contact = () => {
 
             fetch("http://localhost:5000/api/v1/messages", requestOptions)
                 .then((res) => {
-                    toast("Message sent successfully", {
-                        type: "success",
-                        draggable: false,
-                    });
+                    toast.success("Message sent successfully");
+                    formik.resetForm();
                 })
-                .catch((error) => {});
+                .catch((error) => {
+                    toast.error("Something went wrong");
+                });
         },
     });
 
     return (
-        <div className="contact">
-            <div className="contact-container">
-                <div className="contact-info">
-                    <div className="location">
-                        <i className="fa-solid fa-location-dot"></i>
-                        <div className="location-info">
-                            <h3>Location</h3>
-                            <p>District 9, Ho Chi Minh City</p>
+        <div className="container mx-auto px-4 py-8 md:mt-32 mb-80 mt-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Contact Info Section */}
+                <Card className="shadow-lg rounded-md">
+                    <h3 className="text-xl font-semibold mb-6 text-gray-800">Contact Information</h3>
+                    <div className="flex items-start space-x-4 mb-4">
+                        <EnvironmentOutlined className="text-2xl text-blue-500" />
+                        <div>
+                            <h4 className="font-medium text-gray-700">Location</h4>
+                            <p className="text-gray-600">District 9, Ho Chi Minh City</p>
                         </div>
                     </div>
-                    <div className="phone-number">
-                        <i className="fa-solid fa-phone-volume"></i>
-                        <div className="phone-number-info">
-                            <h3>Phone Number</h3>
-                            <p>0825 820 709</p>
+                    <div className="flex items-start space-x-4 mb-4">
+                        <PhoneOutlined className="text-2xl text-blue-500" />
+                        <div>
+                            <h4 className="font-medium text-gray-700">Phone Number</h4>
+                            <p className="text-gray-600">0825 820 709</p>
                         </div>
                     </div>
-                    <div className="email">
-                        <i className="fa-solid fa-envelope-open-text"></i>
-                        <div className="email-info">
-                            <h3>Email</h3>
-                            <p>hophap1311@gmail.com</p>
+                    <div className="flex items-start space-x-4">
+                        <MailOutlined className="text-2xl text-blue-500" />
+                        <div>
+                            <h4 className="font-medium text-gray-700">Email</h4>
+                            <p className="text-gray-600">hophap1311@gmail.com</p>
                         </div>
                     </div>
-                </div>
-                <div className="contact-message">
-                    <form onSubmit={formik.handleSubmit} className="contact-form">
-                        <div className="name-container">
-                            <input
-                                type="text"
-                                className="name-input"
+                </Card>
+
+                {/* Contact Form Section */}
+                <Card className="shadow-lg rounded-md">
+                    <h3 className="text-xl font-semibold mb-6 text-gray-800">Send Us a Message</h3>
+                    <form onSubmit={formik.handleSubmit} className="space-y-4">
+                        {/* Name Field */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Your Name</label>
+                            <Input
                                 name="name"
                                 value={formik.values.name}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                placeholder="Your name"
+                                placeholder="Enter your name"
+                                className="mt-1"
                             />
-                            {formik.touched.name && formik.errors.name ? (
-                                <p className="name-error">{formik.errors.name}</p>
-                            ) : null}
-
+                            {formik.touched.name && formik.errors.name && (
+                                <p className="text-red-500 text-xs mt-1">{formik.errors.name}</p>
+                            )}
                         </div>
-                        <div className="email-container">
-                            <input
-                                type="text"
+
+                        {/* Email Field */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Email</label>
+                            <Input
                                 name="email"
-                                className="email-input"
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                placeholder="Email"
+                                placeholder="Enter your email"
+                                className="mt-1"
                             />
-                            {formik.touched.email && formik.errors.email ? (
-                                <p className="email-error">{formik.errors.email}</p>
-                            ) : null}
+                            {formik.touched.email && formik.errors.email && (
+                                <p className="text-red-500 text-xs mt-1">{formik.errors.email}</p>
+                            )}
                         </div>
-                        <div className="phonenumber-container">
-                            <input
-                                type="text"
+
+                        {/* Phone Number Field */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <Input
                                 name="phoneNumber"
-                                className="phonenumber-input"
                                 value={formik.values.phoneNumber}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                placeholder="Phone number"
+                                placeholder="Enter your phone number"
+                                className="mt-1"
                             />
-                            {formik.touched.phoneNumber &&
-                            formik.errors.phoneNumber ? (
-                                <p className="phone-error">{formik.errors.phoneNumber}</p>
-                            ) : null}
-
+                            {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                                <p className="text-red-500 text-xs mt-1">{formik.errors.phoneNumber}</p>
+                            )}
                         </div>
-                        <div className="location-container">
-                            <input
-                                type="text"
+
+                        {/* Location Field */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Location</label>
+                            <Input
                                 name="location"
-                                className="location-input"
                                 value={formik.values.location}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                placeholder="Location"
+                                placeholder="Enter your location"
+                                className="mt-1"
                             />
-                            {formik.touched.location && formik.errors.location ? (
-                                <p className="location-error">{formik.errors.location}</p>
-                            ) : null}
+                            {formik.touched.location && formik.errors.location && (
+                                <p className="text-red-500 text-xs mt-1">{formik.errors.location}</p>
+                            )}
                         </div>
-                        <div className="message-container">
-                            <textarea
-                                placeholder="Message"
+
+                        {/* Message Field */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Message</label>
+                            <Input.TextArea
                                 name="message"
-                                className="message-textarea"
                                 value={formik.values.message}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                            ></textarea>
-                            {formik.touched.location && formik.errors.message ? (
-                                <p className="message-error">{formik.errors.message}</p>
-                            ) : null}
+                                placeholder="Write your message"
+                                rows={4}
+                                className="mt-1"
+                            />
+                            {formik.touched.message && formik.errors.message && (
+                                <p className="text-red-500 text-xs mt-1">{formik.errors.message}</p>
+                            )}
                         </div>
-                        <button type="submit" className="send-btn">
-                            Send
-                        </button>
+
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="w-full"
+                            size="large"
+                        >
+                            Send Message
+                        </Button>
                     </form>
-                </div>
+                </Card>
             </div>
         </div>
     );
