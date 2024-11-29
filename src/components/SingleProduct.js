@@ -204,9 +204,9 @@ export const SingleProduct = () => {
             <button className="add-btn" onClick={() => addToCart(_id, amount)}>
               Add to cart
             </button>
-            <button className="buy-btn" onClick={() => buyNow(_id, amount)}>
+            {/* <button className="buy-btn" onClick={() => buyNow(_id, amount)}>
               Buy now
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="max-w-6xl mx-auto mt-16 px-4">
