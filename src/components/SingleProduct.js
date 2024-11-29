@@ -102,6 +102,30 @@ export const SingleProduct = () => {
 
   const buyNow = (_id, amount) => {
     addToCart(_id, amount);
+    if (!selectedSize) {
+      toast("Please select a size before adding to cart", {
+        type: "error",
+        draggable: false,
+      });
+      return;
+    }
+
+    const selectedSizeObj = singleProduct.sizes.find(
+      (sizeObj) => sizeObj.size === selectedSize
+    );
+
+    if (amount > selectedSizeObj.quantity) {
+      toast(
+        `Only ${selectedSizeObj.quantity} items available for size ${selectedSize}`,
+        {
+          type: "error",
+          draggable: false,
+        }
+      );
+      return;
+    }
+
+    dispatch(addItem({ id: _id, amount, size: selectedSize }));
     navigate("/cart");
   };
 

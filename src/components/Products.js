@@ -15,6 +15,7 @@ export const Products = () => {
     const [page, setPage] = useState(0);
     const itemsPerPage = 9;
 
+    
     const getProducts = async () => {
         try {
             setLoadingProducts(true);
@@ -22,7 +23,10 @@ export const Products = () => {
                 `http://localhost:5000/api/v1/products?category=${category}&quality=${quality}&sort=${sort}`
             );
             const responseData = await response.json();
+            console.log(responseData);
+            
             const data = responseData.products;
+            
             const numberOfPages = Math.ceil(data.length / itemsPerPage);
             const newData = Array.from(
                 { length: numberOfPages },
@@ -161,7 +165,7 @@ export const Products = () => {
                         </ul>
                     </div>
                     <div className="sort-container">
-                        <label htmlFor="sort">Sort by:</label>
+                        <label htmlFor="sort" className="w-[70px]">Sort by:</label>
                         <select
                             name="sort"
                             id="sort"
@@ -204,25 +208,36 @@ export const Products = () => {
                     )}
                 </div>
             </div>
-            {products && <div className="pagination-container">
-                <button className="prev-btn" onClick={prevPage}>
-                    Prev
-                </button>
-                {data.map((_, index) => {
-                    return (
-                        <button
-                            key={index}
-                            className={`${index === page && "active-btn"}`}
-                            onClick={() => handlePage(index)}
-                        >
-                            {index + 1}
-                        </button>
-                    );
-                })}
-                <button className="next-btn" onClick={nextPage}>
-                    Next
-                </button>
-            </div>}
+            {products && <div className="pagination-container flex justify-center items-center space-x-2 mt-6">
+    <button
+        className="prev-btn px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded disabled:bg-gray-100 disabled:text-gray-400"
+        onClick={prevPage}
+        disabled={page === 0}
+    >
+        Prev
+    </button>
+    {data.map((_, index) => (
+        <button
+            key={index}
+            className={`px-4 py-2 rounded ${
+                index === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition-colors"
+            }`}
+            onClick={() => handlePage(index)}
+        >
+            {index + 1}
+        </button>
+    ))}
+    <button
+        className="next-btn px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded disabled:bg-gray-100 disabled:text-gray-400"
+        onClick={nextPage}
+        disabled={page === data.length - 1}
+    >
+        Next
+    </button>
+</div>
+}
             
         </div>
     );

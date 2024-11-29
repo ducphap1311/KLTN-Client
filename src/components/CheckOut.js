@@ -30,6 +30,7 @@ export const CheckOut = () => {
     { id: "cash", name: "Cash on delivery", icon: "💵" },
     { id: "paypal", name: "PayPal", icon: "💳" },
   ];
+
   useEffect(() => {
     authenticateUser();
     if (!errorUser) {
@@ -39,15 +40,16 @@ export const CheckOut = () => {
   }, []);
 
   const addPayPal = () => {
-    const script = document.createElement("script")
-    script.src="https://sandbox.paypal.com/sdk/js?client-id=AQFmQKmWHFS_ziwztP1zO9xXq9pybnmD0slxWR6IUyoE4sqDKDmiyNAlYwAKK6WSJWZWc1qsj63ojeXV"
-    script.type="text/javascript"
-    document.body.appendChild(script)
-  }
+    const script = document.createElement("script");
+    script.src =
+      "https://sandbox.paypal.com/sdk/js?client-id=AQFmQKmWHFS_ziwztP1zO9xXq9pybnmD0slxWR6IUyoE4sqDKDmiyNAlYwAKK6WSJWZWc1qsj63ojeXV";
+    script.type = "text/javascript";
+    document.body.appendChild(script);
+  };
 
   useEffect(() => {
-    addPayPal()
-  }, [])
+    addPayPal();
+  }, []);
 
   const authenticateUser = async () => {
     setIsLoading(true);
@@ -143,7 +145,7 @@ export const CheckOut = () => {
               `http://localhost:5000/v1/products/${product._id}`,
               putRequestOptions
             )
-              .then((res) => {})
+              .then((res) => { })
               .catch((error) => {
                 console.log(error);
               });
@@ -153,6 +155,38 @@ export const CheckOut = () => {
         }
       });
     });
+  };
+
+  const handleOrder = async (values) => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: values.name,
+        address: `${values.address}, ${values.ward}, ${values.district}, ${values.city}`,
+        orderTotal: total + shippingPrice,
+        cartItems: cartItems,
+        amount: amount,
+      }),
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v1/orders",
+        requestOptions
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong with the order!");
+      }
+      localStorage.removeItem("cartItems");
+      dispatch(clearCart());
+      updateProducts();
+      navigate("/orders");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const formik = useFormik({
@@ -175,35 +209,7 @@ export const CheckOut = () => {
       ),
     }),
     onSubmit: async (values) => {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name,
-          address: `${values.address}, ${values.ward}, ${values.district}, ${values.city}`,
-          orderTotal: total + shippingPrice,
-          cartItems: cartItems,
-          amount: amount,
-        }),
-      };
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/v1/orders",
-          requestOptions
-        );
-        if (!response) {
-          throw new Error("something wrong here!");
-        }
-        localStorage.removeItem("cartItems");
-        dispatch(clearCart());
-        updateProducts();
-        navigate("/orders");
-      } catch (error) {
-        console.log(error);
-      }
+      await handleOrder(values);
     },
   });
 
@@ -235,7 +241,6 @@ export const CheckOut = () => {
       </div>
       <div className="checkout-information-container">
         <div className="checkout-information">
-          {/* <p className="text-xl">Shipping Information</p> */}
           <form onSubmit={formik.handleSubmit}>
             <div className="name-information">
               <label>Your Name</label>
@@ -245,6 +250,7 @@ export const CheckOut = () => {
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                className="pl-3"
               />
               {formik.touched.name && formik.errors.name ? (
                 <p className="name-error">{formik.errors.name}</p>
@@ -337,39 +343,48 @@ export const CheckOut = () => {
               <p>${(total + shippingPrice).toFixed(2)}</p>
             </div>
           </div>
-          <div className="w-full mx-auto mt-5">
-            {
-              selectedPayment === "paypal" && 
-              <PayPalButton
-                amount="0.01"
-                // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                onSuccess={(details, data) => {
-                  alert(
-                    "Transaction completed by " + details.payer.name.given_name
-                  );
+          <div className="w-full mx-auto mt-5" >
+            {selectedPayment === "paypal" && (
+              <div style={{
+                pointerEvents: !(formik.isValid && formik.dirty) ? "none" : "auto",
+                opacity: !(formik.isValid && formik.dirty) ? 0.5 : 1,
+              }}>
 
-                  // OPTIONAL: Call your server to save the transaction
-                  // return fetch("/paypal-transaction-complete", {
-                  //   method: "post",
-                  //   body: JSON.stringify({
-                  //     orderID: data.orderID,
-                  //   }),
-                  // });
-                }}
-              />
-            }
-            <h2 className="text-base font-medium text-gray-900 mb-4">
+                <PayPalButton
+                  amount={total + shippingPrice}
+                  onSuccess={(details) => {
+  
+                    alert("Transaction completed by " + details.payer.name.given_name);
+  
+                    // Nếu validate thành công, tạo object values và gọi handleOrder.
+                    const values = {
+                      name: formik.values.name,
+                      city: formik.values.city,
+                      district: formik.values.district,
+                      ward: formik.values.ward,
+                      address: formik.values.address,
+                    };
+  
+                    handleOrder(values);
+                  }}
+                  options={{
+                    disable: !(formik.isValid && formik.dirty), // Disable nút nếu form chưa hợp lệ hoặc chưa chỉnh sửa
+                  }}
+                  onError={() => alert("Something")}
+                />
+              </div>
+            )}
+            <h2 className="text-sm font-medium text-gray-900 mb-4">
               Choose payment method
             </h2>
             <div className="space-y-4">
               {paymentMethods.map((method) => (
                 <label
                   key={method.id}
-                  className={`flex items-center justify-between w-full p-2 border-2 rounded-lg cursor-pointer transition-colors ${
-                    selectedPayment === method.id
+                  className={`flex items-center text-sm justify-between w-full p-2 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === method.id
                       ? "bg-blue-50 border-blue-500"
                       : "bg-white border-gray-300 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center">
                     <input
@@ -377,7 +392,17 @@ export const CheckOut = () => {
                       name="paymentMethod"
                       value={method.id}
                       checked={selectedPayment === method.id}
-                      onChange={() => setSelectedPayment(method.id)}
+                      onChange={() => {
+                        if(method.id === "paypal"){
+                          formik.setTouched({
+                          name: true,
+                          city: true,
+                          district: true,
+                          ward: true,
+                          address: true,
+                        })
+                        }
+                        setSelectedPayment(method.id)}}
                       className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                     />
                     <span className="ml-3 font-medium text-gray-900">

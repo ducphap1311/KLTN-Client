@@ -169,7 +169,7 @@ export const Orders = () => {
     }));
     
     return (
-        <div className="container mx-auto px-4 py-8 mt-32">
+        <div className="container mx-auto px-4 py-8 md:mt-32 mt-20">
             <div className="bg-white rounded-lg p-6">
                 <div className="border-b pb-4 mb-6">
                     <h2 className="text-2xl font-semibold text-gray-800">
@@ -181,6 +181,7 @@ export const Orders = () => {
                     columns={columns}
                     pagination={{ pageSize: 5 }}
                     className="orders-table"
+                    scroll={{ x: "max-content" }} 
                 />
             </div>
         </div>

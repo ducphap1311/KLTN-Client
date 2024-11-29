@@ -167,7 +167,14 @@ const Login = () => {
                         Email or password is incorrect
                     </p>
                 ) : loginStatus === "pending" ? (
-                    <p className="login-pending">Loading...</p>
+                    <p className="login-pending">
+                        <Spin
+              indicator={
+                <LoadingOutlined style={{ color: "rgb(255, 0, 115)" }} spin />
+              }
+              size="large"
+            />
+                    </p>
                 ) : null}
                 <button type="submit" className="sign-in-btn">
                     Sign in

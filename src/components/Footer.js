@@ -6,7 +6,7 @@ export const Footer = () => {
     return (
         <footer className="bg-gray-900 text-gray-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="flex justify-between gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:flex md:justify-between">
                     {/* Logo and About Us */}
                     <div className="max-w-[300px]">
                         <img
@@ -83,14 +83,14 @@ export const Footer = () => {
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Facebook"
                             >
-                                <FacebookOutlined />
+                                <FacebookOutlined className="text-3xl" />
                             </a>
                             <a
                                 href="#"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Instagram"
                             >
-                                <InstagramOutlined />
+                                <InstagramOutlined className="text-3xl"/>
                             </a>
                         </div>
                     </div>
