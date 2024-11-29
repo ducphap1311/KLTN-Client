@@ -142,7 +142,7 @@ export const CheckOut = () => {
               }),
             };
             fetch(
-              `http://localhost:5000/v1/products/${product._id}`,
+              `http://localhost:5000/api/v1/products/${product._id}`,
               putRequestOptions
             )
               .then((res) => { })

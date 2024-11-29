@@ -79,14 +79,16 @@ export const Footer = () => {
                         </h3>
                         <div className="flex space-x-4 text-xl">
                             <a
-                                href="#"
+                                href="https://www.facebook.com/hophap1311"
+                                target="_blank"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Facebook"
                             >
                                 <FacebookOutlined className="text-3xl" />
                             </a>
                             <a
-                                href="#"
+                                href="https://www.facebook.com/hophap1311"
+                                target="_blank"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Instagram"
                             >
