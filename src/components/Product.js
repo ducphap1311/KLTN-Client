@@ -79,13 +79,13 @@ const Product = ({ product }) => {
     return (
         <Link to={`/products/${product._id}`}>
         <div key={product._id} className="product-info">
-            <Link to={`/products/${product._id}`}>
+            {/* <Link to={`/products/${product._id}`}> */}
                 <img
                     src={product.images[0]}
                     alt="product-img"
                     className="product-img"
                 />
-            </Link>
+            {/* </Link> */}
             <p className="product-name">{product.name}</p>
             <p className="product-price">
                 <i className="fa-solid fa-dollar-sign"></i>

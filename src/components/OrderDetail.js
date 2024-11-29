@@ -158,7 +158,7 @@ export const OrderDetail = () => {
     }));
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-[1200px]">
+        <div className="container mx-auto px-4 py-8 max-w-[1200px] md:mt-24 mt-16">
             <div className="bg-white rounded-lg p-6">
                 <div className="mb-6">
                     <h2 className="text-2xl font-semibold text-gray-800 mb-2">

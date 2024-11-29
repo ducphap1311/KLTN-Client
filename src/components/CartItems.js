@@ -130,11 +130,13 @@ export const CartItems = () => {
                 </div>
 
                 <Table
-                    dataSource={dataSource}
-                    columns={columns}
-                    pagination={false}
-                    className="cart-items-table"
-                />
+    dataSource={dataSource}
+    columns={columns}
+    pagination={false}
+    scroll={{ x: "max-content" }} // Enables horizontal scroll
+    className="cart-items-table"
+/>
+
 
                 <div className="mt-6 flex flex-col md:flex-row md:justify-between md:items-center">
                     <div className="text-lg text-gray-800 font-medium">
