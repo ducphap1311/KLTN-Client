@@ -9,6 +9,7 @@ import { Button, Input } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Flex, Spin } from 'antd';
 import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -187,7 +188,13 @@ const Login = () => {
                     </Link>
                 </p>
                 <GoogleLogin locale="en" onSuccess={(response) => {
-                    console.log(response);
+                     if(response.credential) {
+                        localStorage.setItem("token", response.credential)
+                        const decoded = jwtDecode(response.credential)
+                        console.log(decoded);
+                        localStorage.setItem("username", decoded.name)
+                        navigate("/")
+                      }
                     
 
                 }} onError={() => console.log("Login failed")
