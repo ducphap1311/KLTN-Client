@@ -8,15 +8,18 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/Toastify.scss'
 import './index.css'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <GoogleOAuthProvider clientId='334253139404-gs8r7hk7j736qgnomj8b8v3c1e4g9023.apps.googleusercontent.com'>
     <Provider store={store}>
       <BrowserRouter>
         <App /> 
         <ToastContainer />
       </BrowserRouter>
     </Provider>
+  </GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
