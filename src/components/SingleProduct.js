@@ -157,11 +157,9 @@ export const SingleProduct = () => {
               <i className="fa-solid fa-dollar-sign"></i>
               {price}
             </p>
-            <p className="product-description">{description}</p>
-
             <div className="product-sizes">
               <p className="mb-4">Select size:</p>
-              <div className="sizes-container">
+              <div className="sizes-container flex flex-wrap">
                 {sizes.map((sizeObj, index) => (
                   <button
                     key={index}
@@ -174,11 +172,13 @@ export const SingleProduct = () => {
                     {sizeObj.size} 
                     {sizeObj.quantity > 0
                       ? <p className="text-xs">({sizeObj.quantity} available)</p>
-                      : "Out of stock"}
+                      : <p className="text-xs">({sizeObj.quantity} Out of stock)</p>}
                     
                   </button>
                 ))}
               </div>
+            {/* <p className="product-description">{description}</p> */}
+
             </div>
 
             <div className="product-quantity p-5">
