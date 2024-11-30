@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { Button, Input } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Flex, Spin } from 'antd';
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -179,12 +180,18 @@ const Login = () => {
                 <button type="submit" className="sign-in-btn">
                     Sign in
                 </button>
-                <p>
+                <p className="mb-3">
                     Don't have an Account?
                     <Link to="/register" className="link-to-register">
                         Create account
                     </Link>
                 </p>
+                <GoogleLogin locale="en" onSuccess={(response) => {
+                    console.log(response);
+                    
+
+                }} onError={() => console.log("Login failed")
+                }/>
             </form>
             <div
                 className={`modal p-10 ${

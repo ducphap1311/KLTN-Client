@@ -7,6 +7,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Input, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -201,6 +203,19 @@ export const Register = () => {
             Login now
           </Link>
         </p>
+        <div>
+          <GoogleLogin  locale="en" onSuccess={(response) => {
+                      if(response.credential) {
+                        localStorage.setItem("token", response.credential)
+                        const decoded = jwtDecode(response.credential)
+                        console.log(decoded);
+                        localStorage.setItem("username", decoded.name)
+                        navigate("/")
+                      }
+                  }} onError={() => console.log("Login failed")
+                  }/>
+        </div>
+
       </form>
     </div>
   );
