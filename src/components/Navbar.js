@@ -114,7 +114,7 @@ export const Navbar = () => {
                                 </p>
                                 <div
                                     className={`login-register-container ${
-                                        showDropDown && "show-dropdown"
+                                        showDropDown && "show-dropdown registered"
                                     }`}
                                 >
                                     {/* <Link to="/profile">My Profile</Link> */}

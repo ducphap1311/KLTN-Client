@@ -210,6 +210,7 @@ export const Register = () => {
                         const decoded = jwtDecode(response.credential)
                         console.log(decoded);
                         localStorage.setItem("username", decoded.name)
+                        localStorage.setItem("email", decoded.email)
                         navigate("/")
                       }
                   }} onError={() => console.log("Login failed")

@@ -73,9 +73,21 @@ export const Orders = () => {
 
     const columns = [
         {
+            title:"Order ID",
+            dataIndex: "key",
+            key: "orderID",
+            width: 150
+        },
+        {
             title: "Customer",
             dataIndex: "customerName",
             key: "customerName",
+            width: 150
+        },
+        {
+            title: "Phone number",
+            dataIndex: "phone",
+            key: "phone",
             width: 150
         },
         {
@@ -127,19 +139,36 @@ export const Orders = () => {
             },
         },
         {
-            title: "Status",
+            title: "Shipping status",
             dataIndex: "status",
             width: 150,
             key: "status",
             render: (status) => (
                 <span
                     className={`px-2 py-1 rounded ${
-                        status === "Completed"
+                        status === "Delivered"
+                            ? "bg-green-100 text-green-700"
+                            : status === "Cancelled"? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"
+                    }`}
+                >
+                    {status}
+                </span>
+            ),
+        },
+        {
+            title: "Payment status",
+            dataIndex: "paymentStatus",
+            width: 150,
+            key: "isPaid",
+            render: (isPaid) => (
+                <span
+                    className={`px-2 py-1 rounded ${
+                        isPaid 
                             ? "bg-green-100 text-green-700"
                             : "bg-yellow-100 text-yellow-700"
                     }`}
                 >
-                    {status}
+                    {isPaid ? <>Paid</>: <>Unpaid</>}
                 </span>
             ),
         },
@@ -160,12 +189,14 @@ export const Orders = () => {
 
     const dataSource = orders.map((order) => ({
         key: order._id,
+        phone: order.phone,
         customerName: order.name || "Unknown",
         address: order.address || "No Address",
         amount: order.amount || 0,
         orderTotal: order.orderTotal || 0,
         createdAt: order.createdAt,
         status: order.status || "Pending",
+        paymentStatus: order.isPaid
     }));
     
     return (

@@ -62,6 +62,7 @@ const Login = () => {
                 const { username, token } = responseData;
                 localStorage.setItem("username", username);
                 localStorage.setItem("token", token);
+                localStorage.setItem("email", values.email);
                 navigate("/");
             } catch (error) {
                 setLoginStatus("rejected");
@@ -193,6 +194,7 @@ const Login = () => {
                         const decoded = jwtDecode(response.credential)
                         console.log(decoded);
                         localStorage.setItem("username", decoded.name)
+                        localStorage.setItem("email", decoded.email)
                         navigate("/")
                       }
                     
@@ -238,7 +240,7 @@ const Login = () => {
                         <p className="email-rejected">User does not exist</p>
                     ) : emailStatus === "fulfilled" ? (
                         <p className="email-fulfilled text-[#354acf]">
-                            Please check your email and reset your password
+                            Please check your email and reset your password, it might take a few minutes to arrive.
                         </p>
                     ) : emailStatus === "pending" ? (
                         <Spin className="block" size="default" indicator={<LoadingOutlined className="text-[#ff0073]" spin />} />

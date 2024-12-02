@@ -59,14 +59,14 @@ export const Contact = () => {
                         <EnvironmentOutlined className="text-2xl text-blue-500" />
                         <div>
                             <h4 className="font-medium text-gray-700">Location</h4>
-                            <p className="text-gray-600">District 9, Ho Chi Minh City</p>
+                            <p className="text-gray-600">24/5 street 10 , Ho Chi Minh City, Vietnam</p>
                         </div>
                     </div>
                     <div className="flex items-start space-x-4 mb-4">
                         <PhoneOutlined className="text-2xl text-blue-500" />
                         <div>
                             <h4 className="font-medium text-gray-700">Phone Number</h4>
-                            <p className="text-gray-600">0825 820 709</p>
+                            <p className="text-gray-600">077 345 0028</p>
                         </div>
                     </div>
                     <div className="flex items-start space-x-4">

@@ -15,11 +15,11 @@ export const About = () => {
                     />
                     </div>
                     <div className="about-text">
-                        <h2 className="title">About BShoes</h2>
+                        <h2 className="title">About DH Sneaker</h2>
                         <p className="info">
                             "With the continuous evolution of global fashion, 
                             sneakers have become essential footwear for everyone. 
-                            At BShoes, we provide high-quality sneakers 
+                            At DH Sneaker, we provide high-quality sneakers 
                             that combine comfort, durability, and cutting-edge style. 
                             Whether you're running errands, working out, or making a 
                             fashion statement, the right pair of sneakers completes 
