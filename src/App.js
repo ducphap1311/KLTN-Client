@@ -50,7 +50,7 @@ function App() {
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/orders/:id" element={<OrderDetailPage />} />
             <Route path="/reset-password/:id" element={<ResetPasswordPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            {/* <Route path="/profile" element={<ProfilePage />} /> */}
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/verify-email/message" element={<RegisterVerification />} />
         </Routes>

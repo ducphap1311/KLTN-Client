@@ -61,9 +61,19 @@ export const OrderDetail = () => {
     // DataSource for the table
     const dataSource = [
         {
+            key: "8",
+            infoType: "Order ID",
+            details: order._id,
+        },
+        {
             key: "1",
             infoType: "Name",
             details: order.name,
+        },
+        {
+            key: "7",
+            infoType: "Phone number",
+            details: order.phone,
         },
         {
             key: "2",
@@ -77,8 +87,8 @@ export const OrderDetail = () => {
         },
         {
             key: "6",
-            infoType: "Shipping",
-            details: "5$"
+            infoType: "Shipping fee",
+            details: "$5"
         },
         {
             key: "4",
@@ -87,8 +97,21 @@ export const OrderDetail = () => {
         },
         {
             key: "5",
-            infoType: "Status",
-            details: <span className="text-green-600">Shipping</span>,
+            infoType: "Shipping status",
+            details: <span className={`px-2 py-1 rounded ${
+                        order.status === "Delivered"
+                            ? "bg-green-100 text-green-700"
+                            : order.status === "Cancelled"? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"
+                    }`}>{order.status}</span>,
+        },
+        {
+            key: "6",
+            infoType: "Payment status",
+            details: <span className={`px-2 py-1 rounded ${
+                        order.isPaid 
+                            ? "bg-green-100 text-green-700"
+                            : "bg-yellow-100 text-yellow-700"
+                    }`}>{order.isPaid ? <>Paid</>: <>Unpaid</>}</span>,
         },
     ];
 

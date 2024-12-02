@@ -66,8 +66,8 @@ export const Footer = () => {
                             Contact Information
                         </h3>
                         <ul className="space-y-2 text-base">
-                            <li>District 9, Ho Chi Minh City</li>
-                            <li>0825 820 709</li>
+                            <li>24/5 street 10 , Ho Chi Minh City, Vietnam</li>
+                            <li>077 345 0028</li>
                             <li>hophap1311@gmail.com</li>
                         </ul>
                     </div>
@@ -79,7 +79,7 @@ export const Footer = () => {
                         </h3>
                         <div className="flex space-x-4 text-xl">
                             <a
-                                href="https://www.facebook.com/hophap1311"
+                                href="https://www.facebook.com/profile.php?id=100088075852381"
                                 target="_blank"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Facebook"
@@ -87,7 +87,7 @@ export const Footer = () => {
                                 <FacebookOutlined className="text-3xl" />
                             </a>
                             <a
-                                href="https://www.facebook.com/hophap1311"
+                                href="https://www.instagram.com/lehoang_hola2hand?fbclid=IwY2xjawG5SupleHRuA2FlbQIxMAABHegaji6-rFAaBj1Vo4d99QOBZ0HDqFyL8vVi2FG3x-PR8Lxk2murdqGUug_aem_SNhG0W4xNgpZKbC9x1j2ng"
                                 target="_blank"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Instagram"
@@ -101,7 +101,7 @@ export const Footer = () => {
                 {/* Footer Bottom */}
                 <div className="mt-8 pt-8 border-t border-gray-700 text-sm text-center">
                     <p className="text-gray-500">
-                        &copy; 2024 BShoes. All rights reserved.
+                        &copy; 2024 DH Sneaker. All rights reserved.
                     </p>
                 </div>
             </div>

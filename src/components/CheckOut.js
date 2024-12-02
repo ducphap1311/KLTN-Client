@@ -145,7 +145,7 @@ export const CheckOut = () => {
               `http://localhost:5000/api/v1/products/${product._id}`,
               putRequestOptions
             )
-              .then((res) => { })
+              .then((res) => {})
               .catch((error) => {
                 console.log(error);
               });
@@ -170,6 +170,8 @@ export const CheckOut = () => {
         orderTotal: total + shippingPrice,
         cartItems: cartItems,
         amount: amount,
+        phone: values.phone,
+        isPaid: values.isPaid
       }),
     };
     try {
@@ -180,6 +182,14 @@ export const CheckOut = () => {
       if (!response.ok) {
         throw new Error("Something went wrong with the order!");
       }
+      const responseData = await response.json()
+      localStorage.setItem("city", values.city)
+      localStorage.setItem("district", values.district)
+      localStorage.setItem("ward", values.ward)
+      localStorage.setItem("phone", values.phone)
+      localStorage.setItem("address", values.address)
+      
+      await sendEmail(responseData.order._id)
       localStorage.removeItem("cartItems");
       dispatch(clearCart());
       updateProducts();
@@ -189,15 +199,30 @@ export const CheckOut = () => {
     }
   };
 
+  const sendEmail = async (id) => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: localStorage.getItem("email"),
+                orderID: id,
+            }),
+        };
+        await fetch("http://localhost:5000/api/v1/send-order", requestOptions);
+    };
+
   const formik = useFormik({
     initialValues: {
       name: localStorage.getItem("username")
         ? localStorage.getItem("username")
         : "",
-      city: "",
-      district: "",
-      ward: "",
-      address: "",
+      city: localStorage.getItem("city") || "",
+      district: localStorage.getItem("district") || "",
+      ward: localStorage.getItem("ward") || "",
+      address: localStorage.getItem("address") || "",
+      phone: localStorage.getItem("phone") || "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please provide your name"),
@@ -207,6 +232,12 @@ export const CheckOut = () => {
       address: Yup.string().required(
         "Please provide address detail (house number, street name...)"
       ),
+      phone: Yup.string()
+        .matches(
+          /^(\+84|0)\d{9,10}$/,
+          "Phone number is not valid. It should start with '+84' or '0' and contain 10-11 digits."
+        )
+        .required("Phone number is required."),
     }),
     onSubmit: async (values) => {
       await handleOrder(values);
@@ -281,7 +312,7 @@ export const CheckOut = () => {
                 value={formik.values.district}
                 onChange={handleDistrictChange}
                 onBlur={() => formik.setFieldTouched("district")}
-                disabled={!districtsList.length}
+                disabled={!formik.values.district && !districtsList.length}
               >
                 {districtsList.map((district) => (
                   <Option key={district.code} value={district.name}>
@@ -300,7 +331,7 @@ export const CheckOut = () => {
                 value={formik.values.ward}
                 onChange={handleWardChange}
                 onBlur={() => formik.setFieldTouched("ward")}
-                disabled={!wardsList.length}
+                disabled={!formik.values.ward && !wardsList.length}
               >
                 {wardsList.map((ward) => (
                   <Option key={ward.code} value={ward.name}>
@@ -325,6 +356,19 @@ export const CheckOut = () => {
                 <p className="address-error">{formik.errors.address}</p>
               ) : null}
             </div>
+            <div className="address-information">
+              <label>Phone number</label>
+              <Input
+                type="text"
+                name="phone"
+                value={formik.values.phone}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.phone && formik.errors.phone ? (
+                <p className="address-error">{formik.errors.phone}</p>
+              ) : null}
+            </div>
             <button type="submit">Place Your Order</button>
           </form>
         </div>
@@ -343,19 +387,24 @@ export const CheckOut = () => {
               <p>${(total + shippingPrice).toFixed(2)}</p>
             </div>
           </div>
-          <div className="w-full mx-auto mt-5" >
+          <div className="w-full mx-auto mt-5">
             {selectedPayment === "paypal" && (
-              <div style={{
-                pointerEvents: !(formik.isValid && formik.dirty) ? "none" : "auto",
-                opacity: !(formik.isValid && formik.dirty) ? 0.5 : 1,
-              }}>
-
+              <div
+                style={{
+                  pointerEvents: !(formik.isValid)
+                    ? "none"
+                    : "auto",
+                  opacity: !(formik.isValid) ? 0.5 : 1,
+                }}
+              >
                 <PayPalButton
                   amount={total + shippingPrice}
                   onSuccess={(details) => {
-  
-                    alert("Transaction completed by " + details.payer.name.given_name);
-  
+                    alert(
+                      "Transaction completed by " +
+                        details.payer.name.given_name
+                    );
+
                     // Nếu validate thành công, tạo object values và gọi handleOrder.
                     const values = {
                       name: formik.values.name,
@@ -363,14 +412,16 @@ export const CheckOut = () => {
                       district: formik.values.district,
                       ward: formik.values.ward,
                       address: formik.values.address,
+                      phone: formik.values.phone,
+                      isPaid: true
                     };
-  
+
                     handleOrder(values);
                   }}
                   options={{
                     disable: !(formik.isValid && formik.dirty), // Disable nút nếu form chưa hợp lệ hoặc chưa chỉnh sửa
                   }}
-                  onError={() => alert("Something")}
+                  onError={() => alert("Some error happened, try later!")}
                 />
               </div>
             )}
@@ -381,10 +432,11 @@ export const CheckOut = () => {
               {paymentMethods.map((method) => (
                 <label
                   key={method.id}
-                  className={`flex items-center text-sm justify-between w-full p-2 border-2 rounded-lg cursor-pointer transition-colors ${selectedPayment === method.id
+                  className={`flex items-center text-sm justify-between w-full p-2 border-2 rounded-lg cursor-pointer transition-colors ${
+                    selectedPayment === method.id
                       ? "bg-blue-50 border-blue-500"
                       : "bg-white border-gray-300 hover:bg-gray-50"
-                    }`}
+                  }`}
                 >
                   <div className="flex items-center">
                     <input
@@ -393,16 +445,18 @@ export const CheckOut = () => {
                       value={method.id}
                       checked={selectedPayment === method.id}
                       onChange={() => {
-                        if(method.id === "paypal"){
+                        if (method.id === "paypal") {
                           formik.setTouched({
-                          name: true,
-                          city: true,
-                          district: true,
-                          ward: true,
-                          address: true,
-                        })
+                            name: true,
+                            city: true,
+                            district: true,
+                            ward: true,
+                            address: true,
+                            phone: true
+                          });
                         }
-                        setSelectedPayment(method.id)}}
+                        setSelectedPayment(method.id);
+                      }}
                       className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                     />
                     <span className="ml-3 font-medium text-gray-900">

@@ -10,6 +10,38 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
+import { Table } from "antd";
+import  SizeChart  from "./SizeChart";
+
+const sizeChart = [
+  { key: "0", eur: "35", length: "211 ~ 219 mm" },
+  { key: "1", eur: "36", length: "220 ~ 228 mm" },
+  { key: "2", eur: "37", length: "229 ~ 233 mm" },
+  { key: "3", eur: "38", length: "234 ~ 238 mm" },
+  { key: "4", eur: "38", length: "239 ~ 243 mm" },
+  { key: "5", eur: "39", length: "244 ~ 248 mm" },
+  { key: "6", eur: "41", length: "249 ~ 258 mm" },
+  { key: "7", eur: "42", length: "259 ~ 263 mm" },
+  { key: "8", eur: "43", length: "264 ~ 268 mm" },
+  { key: "9", eur: "44", length: "269 ~ 278 mm" },
+  { key: "10", eur: "45", length: "279 ~ 288 mm" },
+];
+
+const columns = [
+    {
+      title: "EUR",
+      dataIndex: "eur",
+      key: "eur",
+      align: "center",
+      className: "font-bold",
+    },
+    {
+      title: "Foot Length (mm)",
+      dataIndex: "length",
+      key: "length",
+      align: "center",
+    },
+  ];
 
 export const SingleProduct = () => {
   const { id } = useParams();
@@ -157,8 +189,9 @@ export const SingleProduct = () => {
               <i className="fa-solid fa-dollar-sign"></i>
               {price}
             </p>
+                <p className="product-description text-gray-600">{description}</p>
             <div className="product-sizes">
-              <p className="mb-4">Select size:</p>
+              {/* <p className="mb-4">Select size:</p> */}
               <div className="sizes-container flex flex-wrap">
                 {sizes.map((sizeObj, index) => (
                   <button
@@ -177,7 +210,6 @@ export const SingleProduct = () => {
                   </button>
                 ))}
               </div>
-            {/* <p className="product-description">{description}</p> */}
 
             </div>
 
@@ -249,6 +281,7 @@ export const SingleProduct = () => {
           </div> */}
             </div>
           </div>
+          <SizeChart />
 
           {/* Specifications */}
           <div className="mb-12">
