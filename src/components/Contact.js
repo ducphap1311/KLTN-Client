@@ -32,7 +32,7 @@ export const Contact = () => {
                 body: JSON.stringify({
                     name: values.name,
                     email: values.email,
-                    phoneNumber: Number(values.phoneNumber),
+                    phonenumber: Number(values.phoneNumber),
                     location: values.location,
                     message: values.message,
                 }),

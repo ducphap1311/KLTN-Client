@@ -59,7 +59,11 @@ const Login = () => {
                     throw new Error("Invalid email or password");
                 }
                 const responseData = await response.json();
-                const { username, token } = responseData;
+                const { username, token, isActive } = responseData;
+                if(!isActive) {
+                    setLoginStatus("banned")
+                    return;
+                }
                 localStorage.setItem("username", username);
                 localStorage.setItem("token", token);
                 localStorage.setItem("email", values.email);
@@ -169,7 +173,7 @@ const Login = () => {
                     <p className="login-rejected">
                         Email or password is incorrect
                     </p>
-                ) : loginStatus === "pending" ? (
+                ) : loginStatus === "banned" ? <p className="login-rejected">Your account has been banned, contact admin for information</p> : loginStatus === "pending" ? (
                     <p className="login-pending">
                         <Spin
               indicator={

@@ -128,90 +128,92 @@ export const CheckOut = () => {
   };
 
   const updateProducts = async () => {
-    needUpdatingProducts.forEach((product) => {
-      cartItems.forEach((item) => {
-        if (product._id === item._id) {
-          try {
-            const putRequestOptions = {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                totalAmount: product.totalAmount - item.amount,
-              }),
-            };
-            fetch(
-              `http://localhost:5000/api/v1/products/${product._id}`,
-              putRequestOptions
-            )
-              .then((res) => {})
-              .catch((error) => {
-                console.log(error);
-              });
-          } catch (error) {
-            console.log(error);
+    const updates = cartItems.map(async (item) => {
+      const sizesToUpdate = [{ size: item.size, quantity: item.amount }];
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/v1/products/update-sizes/single`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify({
+              productId: item._id,
+              sizes: sizesToUpdate,
+            }),
           }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to update product sizes");
         }
-      });
+      } catch (error) {
+        console.error(`Error updating product sizes for ${item._id}:`, error);
+      }
     });
+
+    await Promise.all(updates); // Đảm bảo tất cả các cập nhật đã hoàn thành
   };
 
-  const handleOrder = async (values) => {
+const handleOrder = async (values) => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: values.name,
+      address: `${values.address}, ${values.ward}, ${values.district}, ${values.city}`,
+      orderTotal: total + shippingPrice,
+      cartItems: cartItems,
+      amount: amount,
+      phone: values.phone,
+      isPaid: values.isPaid,
+    }),
+  };
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/v1/orders",
+      requestOptions
+    );
+
+    if (!response.ok) {
+      throw new Error("Something went wrong with the order!");
+    }
+
+    const responseData = await response.json();
+    await updateProducts(); // Gọi hàm cập nhật sản phẩm sau khi đặt hàng thành công
+    localStorage.setItem("city", values.city);
+    localStorage.setItem("district", values.district);
+    localStorage.setItem("ward", values.ward);
+    localStorage.setItem("phone", values.phone);
+    localStorage.setItem("address", values.address);
+    await sendEmail(responseData.order._id);
+    localStorage.removeItem("cartItems");
+    dispatch(clearCart());
+    navigate("/orders");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+  const sendEmail = async (id) => {
     const requestOptions = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: values.name,
-        address: `${values.address}, ${values.ward}, ${values.district}, ${values.city}`,
-        orderTotal: total + shippingPrice,
-        cartItems: cartItems,
-        amount: amount,
-        phone: values.phone,
-        isPaid: values.isPaid
+        email: localStorage.getItem("email"),
+        orderID: id,
       }),
     };
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/v1/orders",
-        requestOptions
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong with the order!");
-      }
-      const responseData = await response.json()
-      localStorage.setItem("city", values.city)
-      localStorage.setItem("district", values.district)
-      localStorage.setItem("ward", values.ward)
-      localStorage.setItem("phone", values.phone)
-      localStorage.setItem("address", values.address)
-      
-      await sendEmail(responseData.order._id)
-      localStorage.removeItem("cartItems");
-      dispatch(clearCart());
-      updateProducts();
-      navigate("/orders");
-    } catch (error) {
-      console.error(error);
-    }
+    await fetch("http://localhost:5000/api/v1/send-order", requestOptions);
   };
-
-  const sendEmail = async (id) => {
-        const requestOptions = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: localStorage.getItem("email"),
-                orderID: id,
-            }),
-        };
-        await fetch("http://localhost:5000/api/v1/send-order", requestOptions);
-    };
 
   const formik = useFormik({
     initialValues: {
@@ -391,10 +393,8 @@ export const CheckOut = () => {
             {selectedPayment === "paypal" && (
               <div
                 style={{
-                  pointerEvents: !(formik.isValid)
-                    ? "none"
-                    : "auto",
-                  opacity: !(formik.isValid) ? 0.5 : 1,
+                  pointerEvents: !formik.isValid ? "none" : "auto",
+                  opacity: !formik.isValid ? 0.5 : 1,
                 }}
               >
                 <PayPalButton
@@ -413,7 +413,7 @@ export const CheckOut = () => {
                       ward: formik.values.ward,
                       address: formik.values.address,
                       phone: formik.values.phone,
-                      isPaid: true
+                      isPaid: true,
                     };
 
                     handleOrder(values);
@@ -452,7 +452,7 @@ export const CheckOut = () => {
                             district: true,
                             ward: true,
                             address: true,
-                            phone: true
+                            phone: true,
                           });
                         }
                         setSelectedPayment(method.id);

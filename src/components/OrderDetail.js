@@ -98,11 +98,35 @@ export const OrderDetail = () => {
         {
             key: "5",
             infoType: "Shipping status",
-            details: <span className={`px-2 py-1 rounded ${
-                        order.status === "Delivered"
-                            ? "bg-green-100 text-green-700"
-                            : order.status === "Cancelled"? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"
-                    }`}>{order.status}</span>,
+            details: order.trackingCode ? (
+    <div>
+      <span className="text-gray-700">
+        The order has been handed over to the shipping partner. You can track the status at{" "}
+        <a
+          href={`https://viettelpost.com.vn/tra-cuu-hanh-trinh-don/`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline"
+        >
+          this link
+        </a>{" "}
+        with the tracking code:{" "}
+        <strong className="text-gray-800">{order.trackingCode}</strong>.
+      </span>
+    </div>
+  ) : (
+    <span
+      className={`px-2 py-1 rounded ${
+        order.status === "Delivered"
+          ? "bg-green-100 text-green-700"
+          : order.status === "Cancelled"
+          ? "bg-red-100 text-red-700"
+          : "bg-yellow-100 text-yellow-700"
+      }`}
+    >
+      {order.status}
+    </span>
+  ),
         },
         {
             key: "6",
@@ -124,7 +148,7 @@ export const OrderDetail = () => {
                 <div className="flex items-center space-x-4">
                     <Link to={`/products/${record._id}`}>
                         <img
-                            src={record.images[0]}
+                            src={record.image}
                             alt={record.name}
                             className="w-16 h-16 object-cover rounded-md"
                         />

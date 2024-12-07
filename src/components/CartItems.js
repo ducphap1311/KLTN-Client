@@ -40,7 +40,7 @@ export const CartItems = () => {
                 <div className="flex items-center space-x-4">
                     <Link to={`/products/${record._id}`}>
                         <img
-                            src={record.images[0]}
+                            src={record.image}
                             alt={record.name}
                             className="w-16 h-16 object-cover rounded-md border"
                         />
