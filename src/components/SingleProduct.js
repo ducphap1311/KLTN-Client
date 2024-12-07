@@ -168,30 +168,29 @@ export const SingleProduct = () => {
   if (!singleProduct) {
     return <Loading />;
   } else {
-    const { _id, images, name, price, description, sizes } = singleProduct;
+    const { _id, image, name, price, description, sizes } = singleProduct;
     const maxQuantity = selectedSize
       ? sizes.find((sizeObj) => sizeObj.size === selectedSize)?.quantity || 0
       : 0;
 
     return (
-      <div className="single-product">
-        <div className="single-product-container">
-          <Slider {...settings}>
-            {images.map((image, index) => (
-              <div className="product-img-container" key={index}>
-                <img src={image} alt="product-img" className="product-img" />
-              </div>
-            ))}
-          </Slider>
+      <div className="single-product pt-20 xl:pt-44">
+        <div className="single-product-container items-start">
+          {/* <Slider {...settings}> */}
+            {/* {images.map((image, index) => ( */}
+              {/* <div className="product-img-container"> */}
+                <img src={image} alt="product-img" className="product-img sm:max-w-[600px] mx-auto" />
+              {/* </div> */}
+            {/* ))} */}
+          {/* </Slider> */}
           <div className="product-info-container">
             <p className="product-name">{name}</p>
             <p className="product-price">
               <i className="fa-solid fa-dollar-sign"></i>
               {price}
             </p>
-                <p className="product-description text-gray-600">{description}</p>
             <div className="product-sizes">
-              {/* <p className="mb-4">Select size:</p> */}
+              <p className="mb-4 font-sans text-base font-medium">Select size:</p>
               <div className="sizes-container flex flex-wrap">
                 {sizes.map((sizeObj, index) => (
                   <button
@@ -241,6 +240,10 @@ export const SingleProduct = () => {
             </button> */}
           </div>
         </div>
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 max-w-6xl mx-auto px-4">
+              Description
+            </h2>
+        <p className="product-description text-gray-600 max-w-[1100px] mx-auto">{description}</p>
         <div className="max-w-6xl mx-auto mt-16 px-4">
           {/* Product Features */}
           <div className="mb-12">

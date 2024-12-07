@@ -90,7 +90,7 @@ export const Navbar = () => {
                                         className="link-name"
                                         onClick={() => setName("")}
                                     >
-                                        <img src={product.images[0]} alt='img' className='image' />
+                                        <img src={product.image} alt='img' className='image' />
                                         <span className="name">
                                             {product.name}
                                         </span>
@@ -206,7 +206,7 @@ export const Navbar = () => {
                                             setShowSidebar(false)
                                         }}
                                     >
-                                        <img src={product.images[0]} alt='img' className='image' />
+                                        <img src={product.image} alt='img' className='image' />
                                         <span className="name">
                                             {product.name}
                                         </span>
