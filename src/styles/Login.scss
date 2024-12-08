@@ -4,8 +4,8 @@
 .login{
     font-family: $roboto-font;
     height: 100vh;
-    @include flex(row, center, center);
-    padding-top: 100px;
+    @include flex(row, center, start);
+    padding-top: 120px;
     .login-form{
         height: fit-content;
         width: 544px;
