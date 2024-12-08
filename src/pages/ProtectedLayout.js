@@ -17,7 +17,7 @@ const ProtectedLayout = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:5000/api/v1/get-user", {
+        const response = await fetch("https://kltn-server.vercel.app/api/v1/get-user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

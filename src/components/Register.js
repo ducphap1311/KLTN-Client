@@ -73,7 +73,7 @@ export const Register = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/v1/register", // Đảm bảo URL đúng
+          "https://kltn-server.vercel.app/api/v1/register", // Đảm bảo URL đúng
           requestOptions
         );
         if (!response.ok) {

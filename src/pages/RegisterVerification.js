@@ -22,7 +22,7 @@ const APIMessageVerification = () => {
             }
 
             try {
-                const response = await fetch(`http://localhost:5000/api/v1/verify-email?token=${id}`);
+                const response = await fetch(`https://kltn-server.vercel.app/api/v1/verify-email?token=${id}`);
                 
                 if (response.ok) {
                     // Nếu thành công

@@ -62,7 +62,7 @@ const Product = ({ product }) => {
         //         }),
         //     };
         //     const response = await fetch(
-        //         `http://localhost:5000/api/v1/products/${_id}`,
+        //         `https://kltn-server.vercel.app/api/v1/products/${_id}`,
         //         requestOptions
         //     );
         //     console.log(response);

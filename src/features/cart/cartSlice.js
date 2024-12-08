@@ -8,7 +8,7 @@ export const getAllProducts = createAsyncThunk(
     async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/v1/products"
+                "https://kltn-server.vercel.app/api/v1/products"
             );
             const dataResponse = await response.json();
             return dataResponse;

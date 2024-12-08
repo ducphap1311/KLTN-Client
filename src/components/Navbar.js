@@ -21,7 +21,7 @@ export const Navbar = () => {
         if (name !== "") {
             try {
                 const response = await fetch(
-                    `http://localhost:5000/api/v1/products?name=${name}`
+                    `https://kltn-server.vercel.app/api/v1/products?name=${name}`
                 );
                 const responseData = await response.json();
                 const data = responseData.products;

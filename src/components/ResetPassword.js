@@ -39,7 +39,7 @@ export const ResetPassword = () => {
                     }),
                 };
                 const response = await fetch(
-                    `http://localhost:5000/api/v1/reset-password/`,
+                    `https://kltn-server.vercel.app/api/v1/reset-password/`,
                     requestOptions
                 );
                 if (!response.ok) {

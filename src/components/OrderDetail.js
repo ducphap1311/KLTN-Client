@@ -18,7 +18,7 @@ export const OrderDetail = () => {
 
   const getSingleOrder = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/orders/${id}`);
+      const response = await fetch(`https://kltn-server.vercel.app/api/v1/orders/${id}`);
       if (!response.ok) {
         throw new Error("Invalid order id");
       }
@@ -39,7 +39,7 @@ export const OrderDetail = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/orders/${selectedOrderId}`,
+        `https://kltn-server.vercel.app/api/v1/orders/${selectedOrderId}`,
         {
           method: "PATCH",
           headers: {
@@ -79,7 +79,7 @@ export const OrderDetail = () => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/v1/orders/${selectedOrderId}`,
+        `https://kltn-server.vercel.app/api/v1/orders/${selectedOrderId}`,
         {
           method: "PATCH",
           headers: {

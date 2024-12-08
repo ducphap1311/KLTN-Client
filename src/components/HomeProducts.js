@@ -9,7 +9,7 @@ export const HomeProducts = (props) => {
     const getHomeProducts = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/v1/products"
+                "https://kltn-server.vercel.app/api/v1/products"
             );
             const responseData = await response.json();
             if(props.quality) {

@@ -38,7 +38,7 @@ export const Contact = () => {
                 }),
             };
 
-            fetch("http://localhost:5000/api/v1/messages", requestOptions)
+            fetch("https://kltn-server.vercel.app/api/v1/messages", requestOptions)
                 .then((res) => {
                     toast.success("Message sent successfully");
                     formik.resetForm();
