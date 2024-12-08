@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FacebookOutlined, InstagramOutlined } from "@ant-design/icons";
+import footer from "../assets/footer.png"
 
 export const Footer = () => {
     return (
@@ -10,9 +11,9 @@ export const Footer = () => {
                     {/* Logo and About Us */}
                     <div className="max-w-[300px]">
                         <img
-                            src={require("../assets/logo.png")}
+                            src={footer}
                             alt="Company Logo"
-                            className="w-32 mb-4"
+                            className="w-36 mb-4"
                         />
                         <p className="text-base leading-relaxed">
                             We provide high-quality sports shoes that bring comfort and style to our customers.
