@@ -12,10 +12,17 @@ export const HomeProducts = (props) => {
                 "http://localhost:5000/api/v1/products"
             );
             const responseData = await response.json();
-            const data = responseData.products.filter(
-                (product) => product.quality === props.quality
-            );
-            setProducts(data);
+            if(props.quality) {
+                const data = responseData.products.filter(
+                    (product) => product.quality === props.quality
+                );
+                setProducts(data);
+            } else if (props.brand) {
+                const data = responseData.products.filter(
+                    (product) => product.brand === props.brand
+                );
+                setProducts(data);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -64,7 +71,7 @@ export const HomeProducts = (props) => {
         <div className="home-products">
             <div className="home-products-container">
                 <div className="home-title">
-                    <p>{props.title}</p>
+                    <p className="font-semibold">{props.title}</p>
                     <i
                         className={props.icon}
                     ></i>

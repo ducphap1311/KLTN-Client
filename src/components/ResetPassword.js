@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import "../styles/ResetPassword.scss";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Input } from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
-import { Flex, Spin } from 'antd';
+import { Input, message, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export const ResetPassword = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [resetStatus, setResetStatus] = useState();
+    const [messageApi, contextHolder] = message.useMessage(); // Sử dụng useMessage của Ant Design
 
     const formik = useFormik({
         initialValues: {
@@ -45,17 +46,27 @@ export const ResetPassword = () => {
                     throw new Error("Error");
                 }
                 setResetStatus("fulfilled");
-                localStorage.removeItem('resetPasswordToken')
+                localStorage.removeItem("resetPasswordToken");
                 values.password = "";
                 values.confirmPassword = "";
+
+                // Hiển thị thông báo thành công
+                messageApi.success("Password reset successfully!", 2);
+
+                // Đợi thông báo xong, sau đó chuyển hướng
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2000);
             } catch (error) {
                 setResetStatus("rejected");
+                messageApi.error("Failed to reset password. Please try again.", 2);
             }
         },
     });
 
     return (
         <div className="reset-password">
+            {contextHolder /* Đặt contextHolder để hiển thị thông báo */}
             <h2 className="reset-password-title">Reset account password</h2>
             <form onSubmit={formik.handleSubmit}>
                 <div className="password-container">
@@ -69,13 +80,11 @@ export const ResetPassword = () => {
                         onBlur={formik.handleBlur}
                     />
                     {formik.touched.password && formik.errors.password ? (
-                        <p className="password-error">
-                            {formik.errors.password}
-                        </p>
+                        <p className="password-error">{formik.errors.password}</p>
                     ) : null}
                 </div>
                 <div className="confirm-password-container">
-                    <input
+                    <Input.Password
                         type="password"
                         name="confirmPassword"
                         value={formik.values.confirmPassword}
@@ -92,16 +101,18 @@ export const ResetPassword = () => {
                     ) : null}
                 </div>
                 {resetStatus === "pending" ? (
-                    <p className="reset-pending"><Spin size="default" indicator={<LoadingOutlined className="text-[#ff0073]" spin />} /></p>
+                    <p className="reset-pending">
+                        <Spin
+                            size="default"
+                            indicator={<LoadingOutlined className="text-[#ff0073]" spin />}
+                        />
+                    </p>
                 ) : resetStatus === "rejected" ? (
                     <p className="reset-rejected text-sm">
-                        There is an error while trying to reset password, try
-                        later.
+                        There is an error while trying to reset password, try later.
                     </p>
                 ) : resetStatus === "fulfilled" ? (
-                    <p className="reset-fulfilled">
-                        Reset password successfully
-                    </p>
+                    <p className="reset-fulfilled">Reset password successfully</p>
                 ) : null}
                 <button type="submit" className="reset-password-btn">
                     Reset password

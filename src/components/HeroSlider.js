@@ -1,6 +1,7 @@
 import React from "react";
 import slider1 from "../assets/slide-bg-1.jpg";
 import slider2 from "../assets/slide-bg-2.jpg";
+import slider3 from "../assets/slide-bg-3.webp";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,12 +41,12 @@ export const HeroSlider = () => {
                             sizes...
                         </p>
                         <Link to='/products'>
-                            <button className="watch-btn ">See More</button>
+                            <button className="watch-btn hover:bg-black">See More</button>
                         </Link>
                     </div>
                 </div>
                 <div className="slider-child">
-                    <img src="https://files.oaiusercontent.com/file-2JnsQZ9iQsvijYRUqPS3Yh?se=2024-11-28T06%3A23%3A38Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Db065a930-e305-480b-bfbf-3465df4dc8d4.webp&sig=eaw32xRABjgFtTauFlFgVbP87J6P9eRIm6JOy3GL6Eo%3D" alt="slider 2" className="slider-img" />
+                    <img src={slider3} alt="slider 2" className="slider-img" />
                     <div className="slider-text text-black">
                         <p className="title text-black">DH Sneaker</p>
                         <p className="info text-black">
@@ -54,7 +55,7 @@ export const HeroSlider = () => {
                             sizes...
                         </p>
                         <Link to='/products'>
-                            <button className="watch-btn text-black hover:bg-transparent">See More</button>
+                            <button className="watch-btn text-black hover:bg-white">See More</button>
                         </Link>
                     </div>
                 </div>

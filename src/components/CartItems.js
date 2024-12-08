@@ -68,7 +68,7 @@ export const CartItems = () => {
             title: "Price",
             dataIndex: "price",
             key: "price",
-            render: (price) => `$${price.toFixed(2)}`,
+            render: (price) => `${price.toLocaleString('vi-VN')} VND`,
         },
         {
             title: "Size",
@@ -105,7 +105,7 @@ export const CartItems = () => {
             title: "Total",
             dataIndex: "total",
             key: "total",
-            render: (text, record) => `$${(record.price * record.amount).toFixed(2)}`,
+            render: (text, record) => `${(record.price * record.amount).toLocaleString('vi-VN')} VND`,
         },
     ];
 
@@ -143,7 +143,7 @@ export const CartItems = () => {
                         <p>
                             Sub-total:{" "}
                             <span className="text-blue-600 font-semibold">
-                                ${total.toFixed(2)}
+                                {total.toLocaleString('vi-VN')} VND
                             </span>
                         </p>
                         <p className="text-sm text-gray-500">

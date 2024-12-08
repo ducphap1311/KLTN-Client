@@ -25,7 +25,7 @@ export const Navbar = () => {
                 );
                 const responseData = await response.json();
                 const data = responseData.products;
-                setProductsOption(data);
+                setProductsOption(data.filter(dt => dt.isActive));
             } catch (error) {
                 console.log(error);
             }

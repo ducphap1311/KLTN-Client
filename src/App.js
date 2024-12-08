@@ -18,12 +18,13 @@ import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import VerifyEmail from "./pages/VerifyEmail";
 import RegisterVerification from "./pages/RegisterVerification"
+import ProtectedLayout from "./pages/ProtectedLayout";
 
 function App() {
     const dispatch = useDispatch()
-    const {cartItems} = useSelector(store => store.cart)
-    const {pathname} = useLocation()
-    
+    const { cartItems } = useSelector(store => store.cart)
+    const { pathname } = useLocation()
+
     useEffect(() => {
         dispatch(getTotalAmount())
     }, [cartItems])
@@ -31,28 +32,30 @@ function App() {
     useEffect(() => {
         dispatch(getAllProducts())
     }, [])
-    
+
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [pathname])
 
     return (
         <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about-us" element={<AboutPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/products/:id" element={<SingleProductPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/checkout" element={<CheckOutPage />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/orders/:id" element={<OrderDetailPage />} />
-            <Route path="/reset-password/:id" element={<ResetPasswordPage />} />
-            {/* <Route path="/profile" element={<ProfilePage />} /> */}
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/verify-email/message" element={<RegisterVerification />} />
+            <Route element={<ProtectedLayout />} >
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about-us" element={<AboutPage />} />
+                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/products/:id" element={<SingleProductPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/checkout" element={<CheckOutPage />} />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/orders/:id" element={<OrderDetailPage />} />
+                <Route path="/reset-password/:id" element={<ResetPasswordPage />} />
+                {/* <Route path="/profile" element={<ProfilePage />} /> */}
+                <Route path="/verify-email" element={<VerifyEmail />} />
+                <Route path="/verify-email/message" element={<RegisterVerification />} />
+            </Route>
         </Routes>
     );
 }
