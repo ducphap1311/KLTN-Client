@@ -11,7 +11,7 @@ export const HomePage = () => {
     <>
       <Navbar />
       <HeroSlider />
-      <img src={banner} alt="banner" className="w-fit max-w-6xl mx-auto mt-10"/>
+      <img src={banner} alt="banner" className="w-full max-w-6xl mx-auto mt-10"/>
       
       <HomeProducts
         quality="best seller"
@@ -23,7 +23,7 @@ export const HomePage = () => {
         title="Most Popular"
         icon="fa-solid fa-fire-flame-curved"
       />
-      <img src="https://bizweb.dktcdn.net/100/446/974/themes/849897/assets/slider_5.jpg?1733207467106" alt="banner" className="w-fit max-w-6xl mx-auto"/>
+      <img src="https://bizweb.dktcdn.net/100/446/974/themes/849897/assets/slider_5.jpg?1733207467106" alt="banner" className="w-full max-w-6xl mx-auto"/>
       <HomeProducts
         brand="MLB"
         // quality="most popular"
@@ -31,7 +31,7 @@ export const HomePage = () => {
         // icon="fa-solid fa-fire-flame-curved"
       />
 
-      <img src="https://www.mothercare.co.id/media/wysiwyg/SDNew_Footwear.adidasid2.jpg" alt="banner" className="w-fit mx-auto"/>
+      <img src="https://www.mothercare.co.id/media/wysiwyg/SDNew_Footwear.adidasid2.jpg" alt="banner" className="w-full max-w-6xl mx-auto"/>
       <HomeProducts
         brand="Adidas"
         // quality="most popular"
@@ -39,7 +39,7 @@ export const HomePage = () => {
         // icon="fa-solid fa-fire-flame-curved"
       />
 
-      <img src="https://cdn.shopify.com/s/files/1/0585/8181/1355/files/BIRTH-HEAD-EN_2560x.webp?v=1732877363" alt="banner" className="w-fit max-w-6xl mx-auto"/>
+      <img src="https://cdn.shopify.com/s/files/1/0585/8181/1355/files/BIRTH-HEAD-EN_2560x.webp?v=1732877363" alt="banner" className="w-full max-w-6xl mx-auto"/>
       <HomeProducts
         brand="Crocs"
         // quality="most popular"
