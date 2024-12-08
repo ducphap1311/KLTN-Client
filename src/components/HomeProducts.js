@@ -14,12 +14,12 @@ export const HomeProducts = (props) => {
             const responseData = await response.json();
             if(props.quality) {
                 const data = responseData.products.filter(
-                    (product) => product.quality === props.quality
+                    (product) => (product.quality === props.quality) &&  product.isActive
                 );
                 setProducts(data);
             } else if (props.brand) {
                 const data = responseData.products.filter(
-                    (product) => product.brand === props.brand
+                    (product) => (product.brand === props.brand) && product.isActive
                 );
                 setProducts(data);
             }
