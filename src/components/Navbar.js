@@ -63,7 +63,7 @@ export const Navbar = () => {
         </div>
         <div className="navbar-logo-container">
           <Link to="/">
-            <img src={logo} alt="logo" className="w-28" />
+            <img src={logo} alt="logo" className="w-[135px]" />
           </Link>
         </div>
         <div className="navbar-search-container">
