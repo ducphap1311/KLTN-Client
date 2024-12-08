@@ -108,7 +108,7 @@ export const Orders = () => {
             title: "Cost",
             dataIndex: "orderTotal",
             key: "orderTotal",
-            render: (orderTotal) => `$${orderTotal.toFixed(2)}`,
+            render: (orderTotal) => `${orderTotal.toLocaleString('vi-VN')} VND`,
             width: 150
         },
         {

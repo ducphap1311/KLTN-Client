@@ -31,7 +31,7 @@ export const Order = ({_id, name, address, orderTotal, createdAt, amount }) => {
             <td>{name}</td>
             <td>{address}</td>
             <td>{amount}</td>
-            <td>${orderTotal.toFixed(2)}</td>
+            <td>{orderTotal} VND</td>
             <td>{formattedTime}</td>
             <td>Shipping</td>
             <td>

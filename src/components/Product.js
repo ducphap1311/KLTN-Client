@@ -87,9 +87,9 @@ const Product = ({ product }) => {
                 />
             {/* </Link> */}
             <p className="product-name">{product.name}</p>
-            <p className="product-price">
-                <i className="fa-solid fa-dollar-sign"></i>
-                {product.price}
+            <p className="product-price font-semibold mb-4">
+                {/* <i className="fa-solid fa-dollar-sign"></i> */}
+                {product.price.toLocaleString('vi-VN')} VND
             </p>
             <button
                 className="add-btn"

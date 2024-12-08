@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { message } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const APIMessageVerification = () => {
     const location = useLocation();
     const [messageApi, contextHolder] = message.useMessage()
+    const navigate = useNavigate()
 
     useEffect(() => {
         // Tạo đối tượng URLSearchParams từ search string của URL
@@ -26,6 +27,9 @@ const APIMessageVerification = () => {
                 if (response.ok) {
                     // Nếu thành công
                     messageApi.success('Verification successful!');
+                    setTimeout(() => {
+                        navigate("/login")
+                    }, 2000)
                 } else {
                     // Nếu thất bại
                     messageApi.error('Verification failed. Please try again.');

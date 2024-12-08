@@ -4,11 +4,15 @@ import { HeroSlider } from "../components/HeroSlider";
 import { HomeProducts } from "../components/HomeProducts";
 import { Navbar } from "../components/Navbar";
 import { Link } from "react-router-dom";
+import banner from "../assets/banner.jpg"
+
 export const HomePage = () => {
   return (
     <>
       <Navbar />
       <HeroSlider />
+      <img src={banner} alt="banner" className="w-fit max-w-6xl mx-auto mt-10"/>
+      
       <HomeProducts
         quality="best seller"
         title="Best Seller"
@@ -18,6 +22,29 @@ export const HomePage = () => {
         quality="most popular"
         title="Most Popular"
         icon="fa-solid fa-fire-flame-curved"
+      />
+      <img src="https://bizweb.dktcdn.net/100/446/974/themes/849897/assets/slider_5.jpg?1733207467106" alt="banner" className="w-fit max-w-6xl mx-auto"/>
+      <HomeProducts
+        brand="MLB"
+        // quality="most popular"
+        title="MLB"
+        // icon="fa-solid fa-fire-flame-curved"
+      />
+
+      <img src="https://www.mothercare.co.id/media/wysiwyg/SDNew_Footwear.adidasid2.jpg" alt="banner" className="w-fit mx-auto"/>
+      <HomeProducts
+        brand="Adidas"
+        // quality="most popular"
+        title="Adidas"
+        // icon="fa-solid fa-fire-flame-curved"
+      />
+
+      <img src="https://cdn.shopify.com/s/files/1/0585/8181/1355/files/BIRTH-HEAD-EN_2560x.webp?v=1732877363" alt="banner" className="w-fit max-w-6xl mx-auto"/>
+      <HomeProducts
+        brand="Crocs"
+        // quality="most popular"
+        title="Crocs"
+        // icon="fa-solid fa-fire-flame-curved"
       />
       <section className="py-5 pb-20 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4 ">

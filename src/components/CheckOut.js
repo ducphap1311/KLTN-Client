@@ -20,7 +20,7 @@ export const CheckOut = () => {
   const [wardsList, setwardsList] = useState([]);
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(true);
-  const shippingPrice = 5;
+  const shippingPrice = 30000;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [needUpdatingProducts, setNeedUpdatingProducts] = useState();
@@ -66,6 +66,7 @@ export const CheckOut = () => {
       );
       const responseData = await response.json();
       const success = responseData.msg;
+      localStorage.setItem("email", responseData.email)
       if (success !== "success") {
         throw new Error("Invalid user");
       }
@@ -172,6 +173,7 @@ const handleOrder = async (values) => {
       amount: amount,
       phone: values.phone,
       isPaid: values.isPaid,
+      email: localStorage.getItem("email")
     }),
   };
   try {
@@ -378,15 +380,15 @@ const handleOrder = async (values) => {
           <div className="price-information w-full">
             <div className="subtotal">
               <p>Subtotal</p>
-              <p>${total.toFixed(2)}</p>
+              <p>{total.toLocaleString('vi-VN')} VND</p>
             </div>
             <div className="shipping">
               <p>Shipping</p>
-              <p>${shippingPrice.toFixed(2)}</p>
+              <p>{shippingPrice.toLocaleString('vi-VN')} VND</p>
             </div>
             <div className="order-total">
               <p>Order Total</p>
-              <p>${(total + shippingPrice).toFixed(2)}</p>
+              <p>{(total + shippingPrice).toLocaleString('vi-VN')} VND</p>
             </div>
           </div>
           <div className="w-full mx-auto mt-5">
@@ -398,7 +400,7 @@ const handleOrder = async (values) => {
                 }}
               >
                 <PayPalButton
-                  amount={total + shippingPrice}
+                  amount={(total + shippingPrice)/24000}
                   onSuccess={(details) => {
                     alert(
                       "Transaction completed by " +

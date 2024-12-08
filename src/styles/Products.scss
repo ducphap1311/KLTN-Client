@@ -11,7 +11,7 @@
         padding: 0 10px;
         @include flex(row, flex-start, flex-start);
         .products-filter{
-            z-index: 200;
+            z-index: 50;
             letter-spacing: 0.9px;
             .products-title{
                 font-size: 22px;

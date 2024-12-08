@@ -8,42 +8,44 @@ import { Loading } from "./Loading";
 export const Products = () => {
     const [data, setData] = useState();
     const [products, setProducts] = useState();
-    const [category, setCategory] = useState("");
+    const [brand, setBrand] = useState("");
     const [quality, setQuality] = useState("");
     const [sort, setSort] = useState("price");
     const [loadingProducts, setLoadingProducts] = useState(false);
     const [page, setPage] = useState(0);
     const itemsPerPage = 9;
 
-    
     const getProducts = async () => {
         try {
             setLoadingProducts(true);
             const response = await fetch(
-                `http://localhost:5000/api/v1/products?category=${category}&quality=${quality}&sort=${sort}`
+                `http://localhost:5000/api/v1/products?brand=${brand}&quality=${quality}&sort=${sort}`
             );
             const responseData = await response.json();
-            console.log(responseData);
-            
-            const data = responseData.products;
-            
-            const numberOfPages = Math.ceil(data.length / itemsPerPage);
+
+            const activeProducts = responseData.products.filter(
+                (product) => product.isActive
+            );
+
+            const numberOfPages = Math.ceil(activeProducts.length / itemsPerPage);
             const newData = Array.from(
                 { length: numberOfPages },
                 (_, index) => {
                     const start = index * itemsPerPage;
-                    return data.slice(start, start + itemsPerPage);
+                    return activeProducts.slice(start, start + itemsPerPage);
                 }
             );
             setData(newData);
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching products:", error);
             setLoadingProducts(true);
+        } finally {
+            setLoadingProducts(false);
         }
     };
 
     const clearFilter = () => {
-        setCategory("");
+        setBrand("");
         setQuality("");
         setSort("");
     };
@@ -69,15 +71,15 @@ export const Products = () => {
     const handlePage = (index) => {
         setPage(index);
     };
-    
+
     useEffect(() => {
-        setPage(0)
+        setPage(0);
         getProducts();
-    }, [category, quality, sort]);
+    }, [brand, quality, sort]);
 
     useEffect(() => {
         if (!data) return;
-        window.scrollTo({top: 0, left: 0, behavior: "smooth", duration: 5000})
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth", duration: 5000 });
         setLoadingProducts(false);
         setProducts(data[page]);
     }, [data, page]);
@@ -85,6 +87,7 @@ export const Products = () => {
     if (!data) {
         return <Loading />;
     }
+
     return (
         <div className="products">
             <div className="products-container">
@@ -97,39 +100,39 @@ export const Products = () => {
                         <span className="products-page">PRODUCTS</span>
                     </div>
                     <div className="categories-container">
-                        <h3>Categories</h3>
+                        <h3>Brands</h3>
                         <ul>
                             <li
                                 className={`${
-                                    category === "" && "category-active"
+                                    brand === "" && "category-active"
                                 }`}
-                                onClick={() => setCategory("")}
+                                onClick={() => setBrand("")}
                             >
                                 All
                             </li>
                             <li
                                 className={`${
-                                    category === "men" && "category-active"
+                                    brand === "MLB" && "category-active"
                                 }`}
-                                onClick={() => setCategory("men")}
+                                onClick={() => setBrand("MLB")}
                             >
-                                Men
+                                MLB
                             </li>
                             <li
                                 className={`${
-                                    category === "women" && "category-active"
+                                    brand === "Adidas" && "category-active"
                                 }`}
-                                onClick={() => setCategory("women")}
+                                onClick={() => setBrand("Adidas")}
                             >
-                                Women
+                                Adidas
                             </li>
                             <li
                                 className={`${
-                                    category === "kids" && "category-active"
+                                    brand === "Crocs" && "category-active"
                                 }`}
-                                onClick={() => setCategory("kids")}
+                                onClick={() => setBrand("Crocs")}
                             >
-                                Kids
+                                Crocs
                             </li>
                         </ul>
                     </div>
@@ -197,7 +200,7 @@ export const Products = () => {
                                 color: "#3f3f3f",
                             }}
                         >
-                            No products matched your search.
+                            No active products matched your search.
                         </p>
                     ) : (
                         products.map((product) => {
@@ -208,37 +211,37 @@ export const Products = () => {
                     )}
                 </div>
             </div>
-            {products && <div className="pagination-container flex justify-center items-center space-x-2 mt-6">
-    <button
-        className="prev-btn px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded disabled:bg-gray-100 disabled:text-gray-400"
-        onClick={prevPage}
-        disabled={page === 0}
-    >
-        Prev
-    </button>
-    {data.map((_, index) => (
-        <button
-            key={index}
-            className={`px-4 py-2 rounded ${
-                index === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition-colors"
-            }`}
-            onClick={() => handlePage(index)}
-        >
-            {index + 1}
-        </button>
-    ))}
-    <button
-        className="next-btn px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded disabled:bg-gray-100 disabled:text-gray-400"
-        onClick={nextPage}
-        disabled={page === data.length - 1}
-    >
-        Next
-    </button>
-</div>
-}
-            
+            {products && (
+                <div className="pagination-container flex justify-center items-center space-x-2 mt-6">
+                    <button
+                        className="prev-btn px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded disabled:bg-gray-100 disabled:text-gray-400"
+                        onClick={prevPage}
+                        disabled={page === 0}
+                    >
+                        Prev
+                    </button>
+                    {data.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`px-4 py-2 rounded ${
+                                index === page
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition-colors"
+                            }`}
+                            onClick={() => handlePage(index)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="next-btn px-4 py-2 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded disabled:bg-gray-100 disabled:text-gray-400"
+                        onClick={nextPage}
+                        disabled={page === data.length - 1}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
