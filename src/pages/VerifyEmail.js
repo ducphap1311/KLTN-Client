@@ -16,7 +16,7 @@ const VerifyEmail = () => {
 
         const verifyEmail = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/v1/verify-email?token=${token}`);
+                const response = await fetch(`https://kltn-server.vercel.app/api/v1/verify-email?token=${token}`);
                 const data = await response.json();
                 if (response.ok) {
                     setStatus("success");

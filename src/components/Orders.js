@@ -26,7 +26,7 @@ export const Orders = () => {
                 },
             };
             const response = await fetch(
-                "http://localhost:5000/api/v1/orders",
+                "https://kltn-server.vercel.app/api/v1/orders",
                 requestOptions
             );
 

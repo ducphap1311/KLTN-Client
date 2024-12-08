@@ -61,7 +61,7 @@ export const CheckOut = () => {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/dashboard",
+        "https://kltn-server.vercel.app/api/v1/dashboard",
         requestOptions
       );
       const responseData = await response.json();
@@ -85,7 +85,7 @@ export const CheckOut = () => {
     let productsList = [];
     idsList.forEach(async (id) => {
       const response = await fetch(
-        `http://localhost:5000/api/v1/products/${id}`
+        `https://kltn-server.vercel.app/api/v1/products/${id}`
       );
       const responseData = await response.json();
       const data = responseData.product;
@@ -133,7 +133,7 @@ export const CheckOut = () => {
       const sizesToUpdate = [{ size: item.size, quantity: item.amount }];
       try {
         const response = await fetch(
-          `http://localhost:5000/api/v1/products/update-sizes/single`,
+          `https://kltn-server.vercel.app/api/v1/products/update-sizes/single`,
           {
             method: "PATCH",
             headers: {
@@ -178,7 +178,7 @@ const handleOrder = async (values) => {
   };
   try {
     const response = await fetch(
-      "http://localhost:5000/api/v1/orders",
+      "https://kltn-server.vercel.app/api/v1/orders",
       requestOptions
     );
 
@@ -214,7 +214,7 @@ const handleOrder = async (values) => {
         orderID: id,
       }),
     };
-    await fetch("http://localhost:5000/api/v1/send-order", requestOptions);
+    await fetch("https://kltn-server.vercel.app/api/v1/send-order", requestOptions);
   };
 
   const formik = useFormik({

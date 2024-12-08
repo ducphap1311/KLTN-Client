@@ -52,7 +52,7 @@ const Login = () => {
             };
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/v1/login",
+                    "https://kltn-server.vercel.app/api/v1/login",
                     requestOptions
                 );
                 if (!response.ok) {
@@ -85,7 +85,7 @@ const Login = () => {
                 body: JSON.stringify({ email }),
             };
             const response = await fetch(
-                "http://localhost:5000/api/v1/forgot-password",
+                "https://kltn-server.vercel.app/api/v1/forgot-password",
                 requestOptions
             );
             if (!response.ok) {
@@ -114,7 +114,7 @@ const Login = () => {
                 token: localStorage.getItem("resetPasswordToken"),
             }),
         };
-        await fetch("http://localhost:5000/api/v1/send-email", requestOptions);
+        await fetch("https://kltn-server.vercel.app/api/v1/send-email", requestOptions);
         localStorage.removeItem('resetPasswordToken')
     };
 
