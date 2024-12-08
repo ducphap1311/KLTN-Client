@@ -3,6 +3,7 @@ import "../styles/Navbar.scss";
 import logo from "../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
+import messenger from "../assets/messenger.png"
 
 export const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -240,23 +241,10 @@ export const Navbar = () => {
       </button>
       <button
         onClick={() => window.open("https://m.me/108098515472393", "_blank")}
-        className="fixed bottom-[70px] right-5 p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        className="fixed bottom-[70px] w-11 right-5 text-white rounded-full"
         aria-label="Open chat"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-          />
-        </svg>
+        <img src={messenger} alt="messenger" className="w-full hover:scale-110 transition-all" />
       </button>
     </div>
   );
