@@ -186,7 +186,7 @@ export const OrderDetail = () => {
           </div>
         ) : (
           <span
-            className={`px-2 pr-0 py-1 rounded ${
+            className={`px-2 py-1 rounded ${
               order.status === "Delivered"
                 ? "bg-green-100 text-green-700"
                 : order.status === "Cancelled"
@@ -195,7 +195,7 @@ export const OrderDetail = () => {
             }`}
           >
             {order.status}{" "}
-            <span className="text-gray-700 bg-white px-2 py-1 rounded">
+            {order.status === "Shipping" &&  <span className="text-gray-700 bg-white px-2 py-1 rounded">
               The order has been handed over to the shipping partner. You can
               track the status at{" "}
               <a
@@ -208,7 +208,8 @@ export const OrderDetail = () => {
               </a>{" "}
               with the tracking code:{" "}
               <strong className="text-gray-800">{order.trackingCode}</strong>
-            </span>
+            </span>}
+           
           </span>
         ),
     },
