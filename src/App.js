@@ -19,6 +19,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import VerifyEmail from "./pages/VerifyEmail";
 import RegisterVerification from "./pages/RegisterVerification"
 import ProtectedLayout from "./pages/ProtectedLayout";
+import ClientBlog from "./pages/Blogs";
 
 function App() {
     const dispatch = useDispatch()
@@ -55,6 +56,7 @@ function App() {
                 {/* <Route path="/profile" element={<ProfilePage />} /> */}
                 <Route path="/verify-email" element={<VerifyEmail />} />
                 <Route path="/verify-email/message" element={<RegisterVerification />} />
+                <Route path="/blogs" element={<ClientBlog />} />
             </Route>
         </Routes>
     );
