@@ -167,6 +167,11 @@ export const Navbar = () => {
             Contact
           </NavLink>
         </li>
+        <li>
+          <NavLink to="/blogs" className="link">
+            Blogs
+          </NavLink>
+        </li>
       </ul>
       <div className={`sidebar ${showSidebar && "show-sidebar"}`}>
         <div

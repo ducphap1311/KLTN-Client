@@ -7,6 +7,7 @@ import { Loading } from "./Loading";
 import SizeChart from "./SizeChart";
 import "../styles/SingleProduct.scss";
 import { Button, Tooltip } from "antd";
+import Comments from "./Comments";
 
 export const SingleProduct = () => {
   const { id } = useParams();
@@ -288,6 +289,7 @@ export const SingleProduct = () => {
           </div>
         </div>
       </div>
+      <Comments productId={singleProduct._id} user={true} />
     </div>
   );
 };
