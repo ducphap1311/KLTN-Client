@@ -44,7 +44,6 @@ export const Navbar = () => {
     }
   };
 
-  // Xử lý logout
   const handleLogout = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("token");
@@ -59,6 +58,10 @@ export const Navbar = () => {
   }, [transcript, listening, resetTranscript]);
 
   // Gọi API tìm kiếm sau khi người dùng dừng nhập
+  useEffect(() => {
+    // searchFocus.current.focus();
+  });
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       getProductsOption();
