@@ -3,7 +3,6 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { List, Card, Button, Modal, Input, Form, Select, message, Tooltip } from "antd";
 import { Skeleton } from "antd"; 
-import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -26,7 +25,6 @@ const AddressCheckout = ({
   const userId = decodedToken?.id;
   const [editLoading, setEditLoading] = useState(false)
   const [addLoading, setAddLoading] = useState(false)
-  const navigate = useNavigate()
   useEffect(() => {
     if (userId) {
       fetchAddresses();
@@ -188,9 +186,9 @@ const AddressCheckout = ({
         />
       )}
 
-      {/* <Button type="primary" className="mt-6" onClick={() => navigate("/address-manager")}>
-        Manage address
-      </Button> */}
+      <Button type="primary" className="mt-6" onClick={() => showModal(null)} classNames={`${addresses[0].address ? "hidden": ""}`}>
+        Add New Address
+      </Button>
       <Tooltip title={addresses[0]?.address ? "" : "You have to add address to continues"}>
         <Button
           className="w-full bg-blue-500 text-white py-5 text-base mt-3"
