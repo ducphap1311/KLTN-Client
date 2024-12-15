@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { List, Card, Button, Modal, Input, Form, Select, message } from "antd";
+import { List, Card, Button, Modal, Input, Form, Select, message, Tooltip } from "antd";
 
 const { Option } = Select;
 
@@ -163,18 +163,20 @@ const AddressCheckout = ({
       <Button type="primary" className="mt-6" onClick={() => showModal(null)}>
         Add New Address
       </Button>
-      <Button
-        className="w-full bg-blue-500 text-white py-5 text-base mt-3"
-        type="submit"
-        onClick={() => handleOrder({
-          name: addresses[0]?.fullName,
-          address: addresses[0]?.address,
-          phone: addresses[0]?.phone,
-          isPaid: false,
-        })}
-      >
-        Place Your Order
-      </Button>
+      <Tooltip title={addresses[0]?.address ? "" : "You have to add address to continues"}>
+        <Button
+          className="w-full bg-blue-500 text-white py-5 text-base mt-3"
+          type="submit"
+          onClick={() => handleOrder({
+            name: addresses[0]?.fullName,
+            address: addresses[0]?.address,
+            phone: addresses[0]?.phone,
+            isPaid: false,
+          })}
+        >
+          Place Your Order
+        </Button>
+      </Tooltip>
       <Modal
         title={editingAddress ? "Edit Address" : "Add Address"}
         visible={isModalVisible}

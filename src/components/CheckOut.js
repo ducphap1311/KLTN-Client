@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Loading } from "./Loading";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Button, Input, Select } from "antd";
+import { Button, Input, Select, Tooltip } from "antd";
 import { PayPalButton } from "react-paypal-button-v2";
 import AddressManager from "./AddressManager";
 import AddressCheckout from "./AddressCheckout";
@@ -69,7 +69,7 @@ export const CheckOut = () => {
       );
       const responseData = await response.json();
       const success = responseData.msg;
-      localStorage.setItem("email", responseData.email)
+      localStorage.setItem("email", responseData.email);
       if (success !== "success") {
         throw new Error("Invalid user");
       }
@@ -119,7 +119,7 @@ export const CheckOut = () => {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
               productId: item._id,
@@ -139,50 +139,49 @@ export const CheckOut = () => {
     await Promise.all(updates); // Đảm bảo tất cả các cập nhật đã hoàn thành
   };
 
-const handleOrder = async (values) => {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: values.name,
-      address: values.address,
-      orderTotal: total + shippingPrice,
-      cartItems: cartItems,
-      amount: amount,
-      phone: values.phone,
-      isPaid: values.isPaid,
-      email: localStorage.getItem("email")
-    }),
-  };
-  try {
-    const response = await fetch(
-      "https://kltn-server.vercel.app/api/v1/orders",
-      requestOptions
-    );
+  const handleOrder = async (values) => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: values.name,
+        address: values.address,
+        orderTotal: total + shippingPrice,
+        cartItems: cartItems,
+        amount: amount,
+        phone: values.phone,
+        isPaid: values.isPaid,
+        email: localStorage.getItem("email"),
+      }),
+    };
+    try {
+      const response = await fetch(
+        "https://kltn-server.vercel.app/api/v1/orders",
+        requestOptions
+      );
 
-    if (!response.ok) {
-      throw new Error("Something went wrong with the order!");
+      if (!response.ok) {
+        throw new Error("Something went wrong with the order!");
+      }
+
+      const responseData = await response.json();
+      await updateProducts(); // Gọi hàm cập nhật sản phẩm sau khi đặt hàng thành công
+      localStorage.setItem("city", values.city);
+      localStorage.setItem("district", values.district);
+      localStorage.setItem("ward", values.ward);
+      localStorage.setItem("phone", values.phone);
+      localStorage.setItem("address", values.address);
+      await sendEmail(responseData.order._id);
+      localStorage.removeItem("cartItems");
+      dispatch(clearCart());
+      navigate("/orders");
+    } catch (error) {
+      console.error(error);
     }
-
-    const responseData = await response.json();
-    await updateProducts(); // Gọi hàm cập nhật sản phẩm sau khi đặt hàng thành công
-    localStorage.setItem("city", values.city);
-    localStorage.setItem("district", values.district);
-    localStorage.setItem("ward", values.ward);
-    localStorage.setItem("phone", values.phone);
-    localStorage.setItem("address", values.address);
-    await sendEmail(responseData.order._id);
-    localStorage.removeItem("cartItems");
-    dispatch(clearCart());
-    navigate("/orders");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+  };
 
   const sendEmail = async (id) => {
     const requestOptions = {
@@ -195,7 +194,10 @@ const handleOrder = async (values) => {
         orderID: id,
       }),
     };
-    await fetch("https://kltn-server.vercel.app/api/v1/send-order", requestOptions);
+    await fetch(
+      "https://kltn-server.vercel.app/api/v1/send-order",
+      requestOptions
+    );
   };
 
   if (isLoading) {
@@ -226,56 +228,68 @@ const handleOrder = async (values) => {
       </div>
       <div className="checkout-information-container">
         <div className="checkout-information">
-          <AddressCheckout handleOrder={handleOrder} addresses={addresses} setAddresses={setAddresses}/>
-          
+          <AddressCheckout
+            handleOrder={handleOrder}
+            addresses={addresses}
+            setAddresses={setAddresses}
+          />
         </div>
         <div className="w-full max-w-[450px]">
           <div className="price-information w-full">
             <div className="subtotal">
               <p>Subtotal</p>
-              <p>{total.toLocaleString('vi-VN')} VND</p>
+              <p>{total.toLocaleString("vi-VN")} VND</p>
             </div>
             <div className="shipping">
               <p>Shipping</p>
-              <p>{shippingPrice.toLocaleString('vi-VN')} VND</p>
+              <p>{shippingPrice.toLocaleString("vi-VN")} VND</p>
             </div>
+
             <div className="order-total">
               <p>Order Total</p>
-              <p>{(total + shippingPrice).toLocaleString('vi-VN')} VND</p>
+              <p>{(total + shippingPrice).toLocaleString("vi-VN")} VND</p>
             </div>
           </div>
           <div className="w-full mx-auto mt-5">
-            {selectedPayment === "paypal" && (
-              <div
-                // style={{
-                //   pointerEvents: !formik.isValid ? "none" : "auto",
-                //   opacity: !formik.isValid ? 0.5 : 1,
-                // }}
-              >
-                <PayPalButton
-                  amount={(total + shippingPrice)/24000}
-                  onSuccess={(details) => {
-                    // alert(
-                    //   "Transaction completed by " +
-                    //     details.payer.name.given_name
-                    // );
+            <Tooltip
+              title={
+                addresses[0]?.address
+                  ? ""
+                  : "You have to add address to continues"
+              }
+            >
+              {selectedPayment === "paypal" && (
+                <div
+                  style={{
+                    pointerEvents: addresses[0]?.address ? "auto" : "none",
+                    opacity: addresses[0]?.address ? 1 : 0.5,
+                  }}
+                >
+                  <PayPalButton
+                    amount={(total + shippingPrice) / 24000}
+                    onSuccess={(details) => {
+                      // alert(
+                      //   "Transaction completed by " +
+                      //     details.payer.name.given_name
+                      // );
 
-                    // Nếu validate thành công, tạo object values và gọi handleOrder.
+                      // Nếu validate thành công, tạo object values và gọi handleOrder.
 
-                    handleOrder({
-                       name: addresses[0]?.fullName,
+                      handleOrder({
+                        name: addresses[0]?.fullName,
                         address: addresses[0]?.address,
                         phone: addresses[0]?.phone,
                         isPaid: true,
-                    });
-                  }}
-                  options={{
-                    // disable: !(formik.isValid && formik.dirty), // Disable nút nếu form chưa hợp lệ hoặc chưa chỉnh sửa
-                  }}
-                  onError={() => alert("Some error happened, try later!")}
-                />
-              </div>
-            )}
+                      });
+                    }}
+                    options={{
+                      disable: addresses[0]?.address ? false : true, // Disable nút nếu form chưa hợp lệ hoặc chưa chỉnh sửa
+                    }}
+                    onError={() => alert("Some error happened, try later!")}
+                  />
+                </div>
+              )}
+            </Tooltip>
             <h2 className="text-sm font-medium text-gray-900 mb-4">
               Choose payment method
             </h2>
