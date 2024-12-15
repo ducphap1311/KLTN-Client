@@ -188,9 +188,9 @@ const AddressCheckout = ({
         />
       )}
 
-      <Button type="primary" className="mt-6" onClick={() => navigate("/address-manager")}>
+      {/* <Button type="primary" className="mt-6" onClick={() => navigate("/address-manager")}>
         Manage address
-      </Button>
+      </Button> */}
       <Tooltip title={addresses[0]?.address ? "" : "You have to add address to continues"}>
         <Button
           className="w-full bg-blue-500 text-white py-5 text-base mt-3"
