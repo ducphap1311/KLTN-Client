@@ -8,8 +8,10 @@ import { Link } from "react-router-dom";
 import { Loading } from "./Loading";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Input, Select } from "antd";
+import { Button, Input, Select } from "antd";
 import { PayPalButton } from "react-paypal-button-v2";
+import AddressManager from "./AddressManager";
+import AddressCheckout from "./AddressCheckout";
 const { Option } = Select;
 
 export const CheckOut = () => {
@@ -25,6 +27,7 @@ export const CheckOut = () => {
   const dispatch = useDispatch();
   const [needUpdatingProducts, setNeedUpdatingProducts] = useState();
   const [selectedPayment, setSelectedPayment] = useState("cash");
+  const [addresses, setAddresses] = useState([]);
 
   const paymentMethods = [
     { id: "cash", name: "Cash on delivery", icon: "💵" },
@@ -106,28 +109,6 @@ export const CheckOut = () => {
     }
   };
 
-  const handleCityChange = (value) => {
-    const selectedCity = citiesList.find((city) => city.name === value);
-    setDistrictsList(selectedCity?.districts || []);
-    setwardsList([]);
-    formik.setFieldValue("city", value);
-    formik.setFieldValue("district", "");
-    formik.setFieldValue("ward", "");
-  };
-
-  const handleDistrictChange = (value) => {
-    const selectedDistrict = districtsList.find(
-      (district) => district.name === value
-    );
-    setwardsList(selectedDistrict?.wards || []);
-    formik.setFieldValue("district", value);
-    formik.setFieldValue("ward", "");
-  };
-
-  const handleWardChange = (value) => {
-    formik.setFieldValue("ward", value);
-  };
-
   const updateProducts = async () => {
     const updates = cartItems.map(async (item) => {
       const sizesToUpdate = [{ size: item.size, quantity: item.amount }];
@@ -167,7 +148,7 @@ const handleOrder = async (values) => {
     },
     body: JSON.stringify({
       name: values.name,
-      address: `${values.address}, ${values.ward}, ${values.district}, ${values.city}`,
+      address: values.address,
       orderTotal: total + shippingPrice,
       cartItems: cartItems,
       amount: amount,
@@ -217,37 +198,6 @@ const handleOrder = async (values) => {
     await fetch("https://kltn-server.vercel.app/api/v1/send-order", requestOptions);
   };
 
-  const formik = useFormik({
-    initialValues: {
-      name: localStorage.getItem("username")
-        ? localStorage.getItem("username")
-        : "",
-      city: localStorage.getItem("city") || "",
-      district: localStorage.getItem("district") || "",
-      ward: localStorage.getItem("ward") || "",
-      address: localStorage.getItem("address") || "",
-      phone: localStorage.getItem("phone") || "",
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Please provide your name"),
-      city: Yup.string().required("Please provide city"),
-      district: Yup.string().required("Please provide district"),
-      ward: Yup.string().required("Please provide ward"),
-      address: Yup.string().required(
-        "Please provide address detail (house number, street name...)"
-      ),
-      phone: Yup.string()
-        .matches(
-          /^(\+84|0)\d{9,10}$/,
-          "Phone number is not valid. It should start with '+84' or '0' and contain 10-11 digits."
-        )
-        .required("Phone number is required."),
-    }),
-    onSubmit: async (values) => {
-      await handleOrder(values);
-    },
-  });
-
   if (isLoading) {
     return <Loading />;
   } else if (!token || errorUser) {
@@ -276,105 +226,8 @@ const handleOrder = async (values) => {
       </div>
       <div className="checkout-information-container">
         <div className="checkout-information">
-          <form onSubmit={formik.handleSubmit}>
-            <div className="name-information">
-              <label>Your Name</label>
-              <Input
-                type="text"
-                name="name"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="pl-3"
-              />
-              {formik.touched.name && formik.errors.name ? (
-                <p className="name-error">{formik.errors.name}</p>
-              ) : null}
-            </div>
-            <div className="city-information">
-              <label>City</label>
-              <Select
-                value={formik.values.city}
-                onChange={handleCityChange}
-                onBlur={() => formik.setFieldTouched("city")}
-                className="w-full h-10"
-              >
-                {citiesList.map((city) => (
-                  <Option key={city.code} value={city.name}>
-                    {city.name}
-                  </Option>
-                ))}
-              </Select>
-              {formik.touched.city && formik.errors.city ? (
-                <p className="city-error">{formik.errors.city}</p>
-              ) : null}
-            </div>
-            <div className="district-information">
-              <label>District</label>
-              <Select
-                className="w-full h-10"
-                value={formik.values.district}
-                onChange={handleDistrictChange}
-                onBlur={() => formik.setFieldTouched("district")}
-                disabled={!formik.values.district && !districtsList.length}
-              >
-                {districtsList.map((district) => (
-                  <Option key={district.code} value={district.name}>
-                    {district.name}
-                  </Option>
-                ))}
-              </Select>
-              {formik.touched.district && formik.errors.district ? (
-                <p className="district-error">{formik.errors.district}</p>
-              ) : null}
-            </div>
-            <div className="ward-information">
-              <label>Ward</label>
-              <Select
-                className="w-full h-10"
-                value={formik.values.ward}
-                onChange={handleWardChange}
-                onBlur={() => formik.setFieldTouched("ward")}
-                disabled={!formik.values.ward && !wardsList.length}
-              >
-                {wardsList.map((ward) => (
-                  <Option key={ward.code} value={ward.name}>
-                    {ward.name}
-                  </Option>
-                ))}
-              </Select>
-              {formik.touched.ward && formik.errors.ward ? (
-                <p className="ward-error">{formik.errors.ward}</p>
-              ) : null}
-            </div>
-            <div className="address-information">
-              <label>Address Detail</label>
-              <Input
-                type="text"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.address && formik.errors.address ? (
-                <p className="address-error">{formik.errors.address}</p>
-              ) : null}
-            </div>
-            <div className="address-information">
-              <label>Phone number</label>
-              <Input
-                type="text"
-                name="phone"
-                value={formik.values.phone}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.phone && formik.errors.phone ? (
-                <p className="address-error">{formik.errors.phone}</p>
-              ) : null}
-            </div>
-            <button type="submit">Place Your Order</button>
-          </form>
+          <AddressCheckout handleOrder={handleOrder} addresses={addresses} setAddresses={setAddresses}/>
+          
         </div>
         <div className="w-full max-w-[450px]">
           <div className="price-information w-full">
@@ -394,34 +247,30 @@ const handleOrder = async (values) => {
           <div className="w-full mx-auto mt-5">
             {selectedPayment === "paypal" && (
               <div
-                style={{
-                  pointerEvents: !formik.isValid ? "none" : "auto",
-                  opacity: !formik.isValid ? 0.5 : 1,
-                }}
+                // style={{
+                //   pointerEvents: !formik.isValid ? "none" : "auto",
+                //   opacity: !formik.isValid ? 0.5 : 1,
+                // }}
               >
                 <PayPalButton
                   amount={(total + shippingPrice)/24000}
                   onSuccess={(details) => {
-                    alert(
-                      "Transaction completed by " +
-                        details.payer.name.given_name
-                    );
+                    // alert(
+                    //   "Transaction completed by " +
+                    //     details.payer.name.given_name
+                    // );
 
                     // Nếu validate thành công, tạo object values và gọi handleOrder.
-                    const values = {
-                      name: formik.values.name,
-                      city: formik.values.city,
-                      district: formik.values.district,
-                      ward: formik.values.ward,
-                      address: formik.values.address,
-                      phone: formik.values.phone,
-                      isPaid: true,
-                    };
 
-                    handleOrder(values);
+                    handleOrder({
+                       name: addresses[0]?.fullName,
+                        address: addresses[0]?.address,
+                        phone: addresses[0]?.phone,
+                        isPaid: true,
+                    });
                   }}
                   options={{
-                    disable: !(formik.isValid && formik.dirty), // Disable nút nếu form chưa hợp lệ hoặc chưa chỉnh sửa
+                    // disable: !(formik.isValid && formik.dirty), // Disable nút nếu form chưa hợp lệ hoặc chưa chỉnh sửa
                   }}
                   onError={() => alert("Some error happened, try later!")}
                 />
@@ -447,16 +296,6 @@ const handleOrder = async (values) => {
                       value={method.id}
                       checked={selectedPayment === method.id}
                       onChange={() => {
-                        if (method.id === "paypal") {
-                          formik.setTouched({
-                            name: true,
-                            city: true,
-                            district: true,
-                            ward: true,
-                            address: true,
-                            phone: true,
-                          });
-                        }
                         setSelectedPayment(method.id);
                       }}
                       className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"

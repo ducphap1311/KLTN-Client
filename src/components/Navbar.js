@@ -156,6 +156,7 @@ export const Navbar = () => {
                     showDropDown && "show-dropdown registered"
                   }`}
                 >
+                  <Link to="/profile">My Profile</Link>
                   <Link to="/orders">My Orders</Link>
                   <Link to="/login" onClick={handleLogout}>
                     Logout

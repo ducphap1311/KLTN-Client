@@ -1,10 +1,12 @@
 import React from "react";
 import "../styles/About.scss";
 import aboutImg from "../assets/about-us.jpg";
+import AddressManager from "./AddressManager";
 
 export const About = () => {
     return (
         <div className="about pt-28">
+            
             <div className="about-container">
                 <div className="about-header about-header grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div className="about-img-container">

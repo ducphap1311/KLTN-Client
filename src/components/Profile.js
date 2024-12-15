@@ -1,218 +1,157 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, message, Card, Spin, Select } from "antd";
+import axios from "axios";
+import { Card, Typography, Button, Modal, Input, Form, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Navbar } from "./Navbar";
 
-const { Option } = Select;
+const { Title, Text } = Typography;
 
 const Profile = () => {
+  const [userData, setUserData] = useState(null);
+  const [defaultAddress, setDefaultAddress] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false); // Loading cho form
-  const [fetching, setFetching] = useState(true); // Loading khi lấy dữ liệu
-  const [userData, setUserData] = useState(null); // Dữ liệu người dùng
 
-  // Dữ liệu cho City, District, Ward
-  const [citiesList, setCitiesList] = useState([]);
-  const [districtsList, setDistrictsList] = useState([]);
-  const [wardsList, setWardsList] = useState([]);
-
-  // Fetch initial data
   useEffect(() => {
-    const fetchProfile = async () => {
-      setFetching(true);
-      try {
-        // Lấy dữ liệu profile từ server
-        const profileResponse = await fetch("/api/profile", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (!profileResponse.ok) throw new Error("Failed to fetch profile data");
-        const profileData = await profileResponse.json();
+    fetchUserData();
+  }, []);
 
-        setUserData(profileData);
-        form.setFieldsValue(profileData); // Đổ dữ liệu vào form
-
-        // Lấy danh sách cities
-        const citiesResponse = await fetch("https://example.com/api/cities");
-        if (!citiesResponse.ok) throw new Error("Failed to fetch cities data");
-        const citiesData = await citiesResponse.json();
-        setCitiesList(citiesData);
-
-        // Tự động cập nhật districts và wards nếu có giá trị mặc định
-        const defaultCity = citiesData.find((city) => city.name === profileData.city);
-        setDistrictsList(defaultCity?.districts || []);
-
-        const defaultDistrict = defaultCity?.districts.find(
-          (district) => district.name === profileData.district
-        );
-        setWardsList(defaultDistrict?.wards || []);
-      } catch (error) {
-        message.error("Failed to load data.");
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchProfile();
-  }, [form]);
-
-  // Handle city change
-  const handleCityChange = (value) => {
-    const selectedCity = citiesList.find((city) => city.name === value);
-    setDistrictsList(selectedCity?.districts || []);
-    setWardsList([]);
-    form.setFieldsValue({ city: value, district: "", ward: "" });
-  };
-
-  // Handle district change
-  const handleDistrictChange = (value) => {
-    const selectedDistrict = districtsList.find(
-      (district) => district.name === value
-    );
-    setWardsList(selectedDistrict?.wards || []);
-    form.setFieldsValue({ district: value, ward: "" });
-  };
-
-  // Handle ward change
-  const handleWardChange = (value) => {
-    form.setFieldsValue({ ward: value });
-  };
-
-  // Handle form submission
-  const handleSave = async (values) => {
-    setLoading(true);
+  const fetchUserData = async () => {
     try {
-      const response = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      if (!response.ok) throw new Error("Failed to update profile.");
-      message.success("Profile updated successfully!");
-    } catch (error) {
-      message.error("Failed to update profile.");
-    } finally {
-      setLoading(false);
+      const res = await axios.post(
+        "https://kltn-server.vercel.app/api/v1/get-user",
+        { email: localStorage.getItem("email") },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const user = res.data.user;
+      setUserData(user);
+
+      // Tìm địa chỉ mặc định
+      const defaultAddr = user.addresses.find((addr) => addr.isDefault);
+      setDefaultAddress(defaultAddr || null);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      message.error("Failed to load user data.");
     }
   };
 
-  if (fetching) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Spin size="large" />
-      </div>
-    );
-  }
+  const handlePasswordChange = async (values) => {
+    try {
+      await axios.post(
+        "https://kltn-server.vercel.app/api/v1/change-password",
+        values,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      message.success("Password changed successfully!");
+      setIsModalVisible(false);
+      form.resetFields();
+    } catch (err) {
+      console.error("Error changing password:", err);
+      message.error("Failed to change password. Please try again.");
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-3xl shadow-md bg-white">
-        <h2 className="text-2xl font-bold text-center mb-6">User Profile</h2>
+    <>
+      <Navbar />
+      <div className="max-w-4xl mx-auto p-4 mt-32 bg-white rounded-lg shadow">
+        {userData ? (
+          <>
+            {/* User Information */}
+            <Card className="mb-6">
+              <Title level={4}>User Information</Title>
+              <p>
+                <Text strong>Username:</Text> {userData.username}
+              </p>
+              <p>
+                <Text strong>Email:</Text> {userData.email}
+              </p>
+              <p>
+                <Text strong>Role:</Text> {userData.role}
+              </p>
+              <p>
+                <Text strong>Account Status:</Text>{" "}
+                {userData.isActive ? "Active" : "Inactive"}
+              </p>
+              <Button
+                type="primary"
+                onClick={() => setIsModalVisible(true)}
+                className="mt-4"
+              >
+                Change Password
+              </Button>
+            </Card>
+
+            {/* Default Address */}
+            <Card className="mb-6">
+              <Title level={4}>Default Address</Title>
+              {defaultAddress ? (
+                <>
+                  <p>
+                    <Text strong>Full Name:</Text> {defaultAddress.fullName}
+                  </p>
+                  <p>
+                    <Text strong>Phone:</Text> {defaultAddress.phone}
+                  </p>
+                  <p>
+                    <Text strong>Address:</Text> {defaultAddress.address}
+                  </p>
+                </>
+              ) : (
+                <p>No default address available.</p>
+              )}
+              <Button
+                type="primary"
+                onClick={() => navigate("/address-manager")}
+                className="mt-4"
+              >
+                Manage Addresses
+              </Button>
+            </Card>
+          </>
+        ) : (
+          <p>Loading user data...</p>
+        )}
+      </div>
+
+      {/* Modal for Changing Password */}
+      <Modal
+        title="Change Password"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
         <Form
           form={form}
           layout="vertical"
-          onFinish={handleSave}
-          initialValues={userData}
+          onFinish={handlePasswordChange}
         >
           <Form.Item
-            name="username"
-            label="Username"
-            rules={[{ required: true, message: "Please enter your username" }]}
+            label="Current Password"
+            name="currentPassword"
+            rules={[{ required: true, message: "Please enter your current password" }]}
           >
-            <Input placeholder="Enter your username" />
+            <Input.Password />
           </Form.Item>
-
           <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { required: true, message: "Please enter your email" },
-              { type: "email", message: "Invalid email format" },
-            ]}
+            label="New Password"
+            name="newPassword"
+            rules={[{ required: true, message: "Please enter your new password" }]}
           >
-            <Input placeholder="Enter your email" />
+            <Input.Password />
           </Form.Item>
-
-          <Form.Item
-            name="phone"
-            label="Phone"
-            rules={[
-              {
-                pattern: /^(\+84|0)\d{9,10}$/,
-                message: "Please enter a valid phone number",
-              },
-            ]}
-          >
-            <Input placeholder="Enter your phone number" />
-          </Form.Item>
-
-          <Form.Item name="city" label="City" rules={[{ required: true }]}>
-            <Select
-              placeholder="Select your city"
-              onChange={handleCityChange}
-              allowClear
-            >
-              {citiesList.map((city) => (
-                <Option key={city.name} value={city.name}>
-                  {city.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="district"
-            label="District"
-            rules={[{ required: districtsList.length > 0 }]}
-          >
-            <Select
-              placeholder="Select your district"
-              onChange={handleDistrictChange}
-              allowClear
-              disabled={districtsList.length === 0}
-            >
-              {districtsList.map((district) => (
-                <Option key={district.name} value={district.name}>
-                  {district.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="ward"
-            label="Ward"
-            rules={[{ required: wardsList.length > 0 }]}
-          >
-            <Select
-              placeholder="Select your ward"
-              onChange={handleWardChange}
-              allowClear
-              disabled={wardsList.length === 0}
-            >
-              {wardsList.map((ward) => (
-                <Option key={ward.name} value={ward.name}>
-                  {ward.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item name="addressDetail" label="Address">
-            <Input placeholder="Enter your detailed address" />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-              className="w-full"
-            >
-              Save Changes
-            </Button>
-          </Form.Item>
+          <Button type="primary" htmlType="submit" className="w-full">
+            Change Password
+          </Button>
         </Form>
-      </Card>
-    </div>
+      </Modal>
+    </>
   );
 };
 

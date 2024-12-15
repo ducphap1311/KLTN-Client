@@ -20,6 +20,8 @@ import VerifyEmail from "./pages/VerifyEmail";
 import RegisterVerification from "./pages/RegisterVerification"
 import ProtectedLayout from "./pages/ProtectedLayout";
 import ClientBlog from "./pages/Blogs";
+import AddressManager from "./components/AddressManager";
+import Profile from "./components/Profile";
 
 function App() {
     const dispatch = useDispatch()
@@ -53,10 +55,11 @@ function App() {
                 <Route path="/orders" element={<OrdersPage />} />
                 <Route path="/orders/:id" element={<OrderDetailPage />} />
                 <Route path="/reset-password/:id" element={<ResetPasswordPage />} />
-                {/* <Route path="/profile" element={<ProfilePage />} /> */}
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/verify-email" element={<VerifyEmail />} />
                 <Route path="/verify-email/message" element={<RegisterVerification />} />
                 <Route path="/blogs" element={<ClientBlog />} />
+                <Route path="/address-manager" element={<AddressManager />} />
             </Route>
         </Routes>
     );
