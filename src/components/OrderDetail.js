@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Table, Modal, Button, message, Input, Form } from "antd";
 import { Loading } from "./Loading";
+import { Select } from "antd";
+
+const {Option } = Select
 
 export const OrderDetail = () => {
   const { id } = useParams();
@@ -11,14 +14,18 @@ export const OrderDetail = () => {
   const [loading, setLoading] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [form] = Form.useForm(); // Ant Design Form
+    const [citiesList, setCitiesList] = useState([]);
+  const [districtsList, setDistrictsList] = useState([]);
+  const [wardsList, setWardsList] = useState([]);
 
   useEffect(() => {
     getSingleOrder();
+    fetchCities();
   }, []);
 
   const getSingleOrder = async () => {
     try {
-      const response = await fetch(`https://kltn-server.vercel.app/api/v1/orders/${id}`);
+      const response = await fetch(`http://localhost:5000/api/v1/orders/${id}`);
       if (!response.ok) {
         throw new Error("Invalid order id");
       }
@@ -39,7 +46,7 @@ export const OrderDetail = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://kltn-server.vercel.app/api/v1/orders/${selectedOrderId}`,
+        `http://localhost:5000/api/v1/orders/${selectedOrderId}`,
         {
           method: "PATCH",
           headers: {
@@ -63,30 +70,63 @@ export const OrderDetail = () => {
       setIsModalVisible(false);
     }
   };
+  const fetchCities = async () => {
+    try {
+      const response = await fetch("https://provinces.open-api.vn/api/?depth=3");
+      const responseData = await response.json();
+      setCitiesList(responseData);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
 
+  const handleCityChange = (value) => {
+    const selectedCity = citiesList.find((city) => city.name === value);
+    setDistrictsList(selectedCity?.districts || []);
+    setWardsList([]);
+    form.setFieldsValue({ city: value, district: null, ward: null });
+  };
+
+  const handleDistrictChange = (value) => {
+    const selectedDistrict = districtsList.find((district) => district.name === value);
+    setWardsList(selectedDistrict?.wards || []);
+    form.setFieldsValue({ district: value, ward: null });
+  };
+
+  const handleWardChange = (value) => {
+    form.setFieldsValue({ ward: value });
+  };
+  
   const handleEditClick = (orderId) => {
     setSelectedOrderId(orderId);
+    const [addressDetail, ward, district, city] = order.address.split(", ").map((item) => item.trim());
     form.setFieldsValue({
-      address: order.address,
+      address: addressDetail,
       phone: order.phone,
+      city,
+      district,
+      ward,
     });
+    setDistrictsList(citiesList.find((c) => c.name === city)?.districts || []);
+    setWardsList(districtsList.find((d) => d.name === district)?.wards || []);
     setIsEditModalVisible(true);
   };
 
-  const handleConfirmEdit = async () => {
+   const handleConfirmEdit = async () => {
     try {
-      const values = await form.validateFields(); // Validate form
+      const values = await form.validateFields();
+      const fullAddress = `${values.address}, ${values.ward}, ${values.district}, ${values.city}`;
       setLoading(true);
 
       const response = await fetch(
-        `https://kltn-server.vercel.app/api/v1/orders/${selectedOrderId}`,
+        `http://localhost:5000/api/v1/orders/${selectedOrderId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            address: values.address,
+            address: fullAddress,
             phone: values.phone,
           }),
         }
@@ -97,7 +137,7 @@ export const OrderDetail = () => {
       }
 
       message.success("Order has been updated successfully");
-      setOrder({ ...order, address: values.address, phone: values.phone }); // Cập nhật dữ liệu hiển thị
+      setOrder({ ...order, address: fullAddress, phone: values.phone });
     } catch (error) {
       console.error("Error updating order:", error);
       message.error("Failed to update the order. Please try again.");
@@ -342,23 +382,41 @@ export const OrderDetail = () => {
         cancelText="Cancel"
       >
         <Form form={form} layout="vertical">
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[{ required: true, message: "Please enter the address" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Phone"
-            name="phone"
-            rules={[
-              { required: true, message: "Please enter the phone number" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
+            <Form.Item label="Detailed Address" name="address" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="City" name="city" rules={[{ required: true }]}>
+              <Select onChange={handleCityChange}>
+                {citiesList.map((city) => (
+                  <Option key={city.code} value={city.name}>
+                    {city.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="District" name="district" rules={[{ required: true }]}>
+              <Select onChange={handleDistrictChange} disabled={!districtsList.length}>
+                {districtsList.map((district) => (
+                  <Option key={district.code} value={district.name}>
+                    {district.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="Ward" name="ward" rules={[{ required: true }]}>
+              <Select onChange={handleWardChange} disabled={!wardsList.length}>
+                {wardsList.map((ward) => (
+                  <Option key={ward.code} value={ward.name}>
+                    {ward.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="Phone" name="phone" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </Form>
+
       </Modal>
     </div>
   );

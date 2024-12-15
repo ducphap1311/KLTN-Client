@@ -28,8 +28,9 @@ export const CheckOut = () => {
   const [needUpdatingProducts, setNeedUpdatingProducts] = useState();
   const [selectedPayment, setSelectedPayment] = useState("cash");
   const [addresses, setAddresses] = useState([]);
+  const [buttonLoading, setButtonLoading] = useState(false)
 
-  const paymentMethods = [
+  const paymentMethods = [  
     { id: "cash", name: "Cash on delivery", icon: "💵" },
     { id: "paypal", name: "PayPal", icon: "💳" },
   ];
@@ -140,6 +141,7 @@ export const CheckOut = () => {
   };
 
   const handleOrder = async (values) => {
+    setButtonLoading(true)
     const requestOptions = {
       method: "POST",
       headers: {
@@ -178,8 +180,10 @@ export const CheckOut = () => {
       localStorage.removeItem("cartItems");
       dispatch(clearCart());
       navigate("/orders");
+      setButtonLoading(false)
     } catch (error) {
       console.error(error);
+      setButtonLoading(false)
     }
   };
 
@@ -232,6 +236,7 @@ export const CheckOut = () => {
             handleOrder={handleOrder}
             addresses={addresses}
             setAddresses={setAddresses}
+            buttonLoading={buttonLoading}
           />
         </div>
         <div className="w-full max-w-[450px]">
@@ -268,12 +273,6 @@ export const CheckOut = () => {
                   <PayPalButton
                     amount={(total + shippingPrice) / 24000}
                     onSuccess={(details) => {
-                      // alert(
-                      //   "Transaction completed by " +
-                      //     details.payer.name.given_name
-                      // );
-
-                      // Nếu validate thành công, tạo object values và gọi handleOrder.
 
                       handleOrder({
                         name: addresses[0]?.fullName,

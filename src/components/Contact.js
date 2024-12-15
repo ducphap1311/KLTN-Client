@@ -6,6 +6,8 @@ import { Input, Button, Card } from "antd";
 import { PhoneOutlined, MailOutlined, EnvironmentOutlined } from "@ant-design/icons";
 
 export const Contact = () => {
+    const [isLoading, setIsLoading] = React.useState(false);
+
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -25,7 +27,8 @@ export const Contact = () => {
             location: Yup.string().required("Please provide your location"),
             message: Yup.string().required("Please provide your message"),
         }),
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
+            setIsLoading(true);
             const requestOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -38,14 +41,15 @@ export const Contact = () => {
                 }),
             };
 
-            fetch("https://kltn-server.vercel.app/api/v1/messages", requestOptions)
-                .then((res) => {
-                    toast.success("Message sent successfully");
-                    formik.resetForm();
-                })
-                .catch((error) => {
-                    toast.error("Something went wrong");
-                });
+            try {
+                await fetch("https://kltn-server.vercel.app/api/v1/messages", requestOptions);
+                toast.success("Message sent successfully");
+                formik.resetForm();
+            } catch (error) {
+                toast.error("Something went wrong");
+            } finally {
+                setIsLoading(false);
+            }
         },
     });
 
@@ -168,6 +172,7 @@ export const Contact = () => {
                             htmlType="submit"
                             className="w-full"
                             size="large"
+                            loading={isLoading} // Thêm trạng thái loading vào nút
                         >
                             Send Message
                         </Button>

@@ -298,6 +298,11 @@ export const Navbar = () => {
                 Contact
               </Link>
             </li>
+            <li>
+          <Link to="/blogs" className="link">
+            Blogs
+          </Link>
+        </li>
           </ul>
         </div>
         <button

@@ -175,10 +175,10 @@ export const SingleProduct = () => {
           )}
         </div>
       </div>
-      <h2 className="text-2xl font-bold mb-6 text-gray-900 max-w-6xl mx-auto px-4">
+      <h2 className="text-2xl font-bold mb-6 mt-5 text-gray-900 max-w-6xl mx-auto px-4">
         Description
       </h2>
-      <p className="product-description text-gray-600 max-w-[1100px] mx-auto">
+      <p className="product-description text-gray-600 max-w-[1100px] px-4 sm:px-0 mx-auto">
         {description}
       </p>
       <div className="max-w-6xl mx-auto mt-16 px-4">

@@ -115,10 +115,10 @@ export const CartItems = () => {
     }));
 
     return (
-        <div className="container mx-auto px-4 py-8 mt-24 max-w-[1200px]">
+        <div className="container mx-auto px-4 py-8 md:mt-24 mt-16 max-w-[1200px]">
             <div className="bg-white rounded-lg p-6">
                 <div className="flex items-center justify-between border-b pb-4 mb-6">
-                    <h2 className="text-2xl font-semibold text-gray-800">
+                    <h2 className="md:text-2xl text-xl font-semibold text-gray-800">
                         Your Cart Items
                     </h2>
                     <Link
