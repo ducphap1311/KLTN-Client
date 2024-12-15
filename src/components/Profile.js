@@ -3,6 +3,7 @@ import axios from "axios";
 import { Card, Typography, Button, Modal, Input, Form, message, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
+import {jwtDecode} from "jwt-decode";
 
 const { Title, Text } = Typography;
 
@@ -10,12 +11,15 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [defaultAddress, setDefaultAddress] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditUsernameModalVisible, setIsEditUsernameModalVisible] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true); // Loading cho toàn bộ trang
   const [isLoadingChangePassword, setIsLoadingChangePassword] = useState(false); // Loading cho nút đổi mật khẩu
   const [isLoadingManageAddresses, setIsLoadingManageAddresses] = useState(false); // Loading cho nút quản lý địa chỉ
+  const [isLoadingEditUsername, setIsLoadingEditUsername] = useState(false); // Loading cho nút edit username
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [editUsernameForm] = Form.useForm();
 
   useEffect(() => {
     fetchUserData();
@@ -74,11 +78,36 @@ const Profile = () => {
     }, 500); // Giả lập thời gian xử lý
   };
 
+  const handleEditUsername = async (values) => {
+    setIsLoadingEditUsername(true);
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken?.id;
+
+    try {
+      await axios.patch(
+        `https://kltn-server.vercel.app/api/v1/user/${userId}`,
+        { username: values.username },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      message.success("Username updated successfully!");
+      setIsEditUsernameModalVisible(false);
+      fetchUserData(); // Refresh user data
+      localStorage.setItem("username", values.username)
+    } catch (err) {
+      console.error("Error updating username:", err);
+      message.error("Failed to update username. Please try again.");
+    } finally {
+      setIsLoadingEditUsername(false);
+      editUsernameForm.resetFields();
+    }
+  };
+
   return (
     <>
       <Navbar />
       {isLoadingPage ? (
-        // Hiển thị hiệu ứng loading khi toàn bộ trang đang tải
         <div className="flex justify-center items-center h-screen">
           <Spin size="large" />
         </div>
@@ -87,9 +116,17 @@ const Profile = () => {
           {/* User Information */}
           <Card className="mb-6">
             <Title level={4}>User Information</Title>
-            <p>
-              <Text strong>Username:</Text> {userData?.username}
-            </p>
+            <div className="flex items-center justify-between">
+              <p>
+                <Text strong>Username:</Text> {userData?.username}
+              </p>
+              <Button
+                type="link"
+                onClick={() => setIsEditUsernameModalVisible(true)}
+              >
+                Edit
+              </Button>
+            </div>
             <p>
               <Text strong>Email:</Text> {userData?.email}
             </p>
@@ -104,7 +141,6 @@ const Profile = () => {
               type="primary"
               onClick={() => setIsModalVisible(true)}
               className="mt-4"
-              // loading={isLoadingChangePassword} // Trạng thái loading cho nút
             >
               Change Password
             </Button>
@@ -132,7 +168,7 @@ const Profile = () => {
               type="primary"
               onClick={handleManageAddresses}
               className="mt-4"
-              loading={isLoadingManageAddresses} // Trạng thái loading cho nút
+              loading={isLoadingManageAddresses}
             >
               Manage Addresses
             </Button>
@@ -166,9 +202,35 @@ const Profile = () => {
             type="primary"
             htmlType="submit"
             className="w-full"
-            loading={isLoadingChangePassword} // Trạng thái loading cho nút
+            loading={isLoadingChangePassword}
           >
             Change Password
+          </Button>
+        </Form>
+      </Modal>
+
+      {/* Modal for Editing Username */}
+      <Modal
+        title="Edit Username"
+        visible={isEditUsernameModalVisible}
+        onCancel={() => setIsEditUsernameModalVisible(false)}
+        footer={null}
+      >
+        <Form form={editUsernameForm} layout="vertical" onFinish={handleEditUsername}>
+          <Form.Item
+            label="New Username"
+            name="username"
+            rules={[{ required: true, message: "Please enter your new username" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            loading={isLoadingEditUsername}
+          >
+            Save Changes
           </Button>
         </Form>
       </Modal>
