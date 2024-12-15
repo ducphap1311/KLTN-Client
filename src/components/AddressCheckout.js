@@ -186,7 +186,7 @@ const AddressCheckout = ({
         />
       )}
 
-      <Button type="primary" className="mt-6" onClick={() => showModal(null)} classNames={`${addresses[0]?.address ? "hidden": ""}`}>
+      <Button type="primary" className={`mt-6 ${addresses[0]?.address ? "hidden": ""}`} onClick={() => showModal(null)}>
         Add New Address
       </Button>
       <Tooltip title={addresses[0]?.address ? "" : "You have to add address to continues"}>

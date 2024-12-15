@@ -11,7 +11,7 @@ const Comments = ({ productId, user }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const decoded = jwtDecode(localStorage.getItem("token"))
+  const decoded =localStorage.getItem("token") ? jwtDecode(localStorage.getItem("token")) : ""
   
   useEffect(() => {
     const fetchComments = async () => {
@@ -44,7 +44,7 @@ const Comments = ({ productId, user }) => {
       message.success("Comment added successfully!");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add comment.");
-      message.error("Failed to add comment. Please try again.");
+      message.error("You need to log in to comment.");
     } finally {
       setLoading(false);
     }
