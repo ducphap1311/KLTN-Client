@@ -240,6 +240,13 @@ export const CheckOut = () => {
           />
         </div>
         <div className="w-full max-w-[450px]">
+            <Tooltip
+              title={
+                addresses[0]?.address
+                  ? ""
+                  : "You have to add address to continues"
+              }
+            >
           <div className="price-information w-full">
             <div className="subtotal">
               <p>Subtotal</p>
@@ -256,13 +263,6 @@ export const CheckOut = () => {
             </div>
           </div>
           <div className="w-full mx-auto mt-5">
-            <Tooltip
-              title={
-                addresses[0]?.address
-                  ? ""
-                  : "You have to add address to continues"
-              }
-            >
               {selectedPayment === "paypal" && (
                 <div
                   style={{
@@ -288,7 +288,6 @@ export const CheckOut = () => {
                   />
                 </div>
               )}
-            </Tooltip>
             <h2 className="text-sm font-medium text-gray-900 mb-4">
               Choose payment method
             </h2>
@@ -298,10 +297,10 @@ export const CheckOut = () => {
                   key={method.id}
                   className={`flex items-center text-sm justify-between w-full p-2 border-2 rounded-lg cursor-pointer transition-colors ${
                     selectedPayment === method.id
-                      ? "bg-blue-50 border-blue-500"
-                      : "bg-white border-gray-300 hover:bg-gray-50"
+                    ? "bg-blue-50 border-blue-500"
+                    : "bg-white border-gray-300 hover:bg-gray-50"
                   }`}
-                >
+                  >
                   <div className="flex items-center">
                     <input
                       type="radio"
@@ -312,7 +311,7 @@ export const CheckOut = () => {
                         setSelectedPayment(method.id);
                       }}
                       className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                    />
+                      />
                     <span className="ml-3 font-medium text-gray-900">
                       {method.name}
                     </span>
@@ -321,13 +320,14 @@ export const CheckOut = () => {
                     className="text-2xl"
                     role="img"
                     aria-label={method.name}
-                  >
+                    >
                     {method.icon}
                   </span>
                 </label>
               ))}
             </div>
           </div>
+              </Tooltip>
         </div>
       </div>
     </div>
