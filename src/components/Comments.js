@@ -139,7 +139,7 @@ const Comments = ({ productId, user }) => {
             >
               Reply
             </button>
-            {user && decoded.id === comment.user?._id && (
+            {(user && decoded.id === comment.user?._id || decoded.role === "admin") && (
               <button
                 onClick={() => deleteComment(comment._id)}
                 className="ml-4 text-sm text-red-500 hover:underline"
