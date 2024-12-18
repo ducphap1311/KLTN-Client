@@ -144,7 +144,7 @@ const Comments = ({ productId, user }) => {
             {comment.user?.username?.charAt(0).toUpperCase() || "U"}
           </div>
           <div className="flex-1">
-            <p className="font-semibold">{comment.user?.username || "Anonymous"}</p>
+            <p className="font-semibold">{comment.user?.username || localStorage.getItem("username") || "Anonymous"}</p>
             <span className="text-sm text-gray-500">{new Date(comment.createdAt).toLocaleString()}</span>
             <p className="mt-2">{comment.content}</p>
             <button

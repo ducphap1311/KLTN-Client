@@ -83,7 +83,8 @@ const ClientBlog = () => {
                 sm: 2, // 2 columns on medium screens
                 md: 2,
                 lg: 2, // 2 columns on larger screens
-                xl: 2
+                xl: 2,
+                xxl: 2
               }}
               dataSource={filteredBlogs}
               renderItem={(blog) => (
