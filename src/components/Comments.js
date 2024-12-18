@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { message } from "antd";
+import { Button, message } from "antd";
 import {jwtDecode} from "jwt-decode";
 
 const Comments = ({ productId, user }) => {
@@ -115,6 +115,20 @@ const Comments = ({ productId, user }) => {
             <p className="font-semibold">{reply.user?.username || localStorage.getItem("username") || "Anonymous"}</p>
             <span className="text-sm text-gray-500">{new Date(reply.createdAt).toLocaleString()}</span>
             <p className="mt-2">{reply.content}</p>
+            <button
+              onClick={() => setReplyParentId(parentId)}
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Reply
+            </button>
+            {(user && decoded.id === reply.user?._id || decoded.role === "admin") && (
+            <button
+              onClick={() => deleteComment(reply._id)}
+              className="text-sm ml-4 text-red-500 hover:underline"
+            >
+              Delete
+            </button>
+          )}
           </div>
         </div>
       </div>

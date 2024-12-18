@@ -237,6 +237,7 @@ export const CheckOut = () => {
             addresses={addresses}
             setAddresses={setAddresses}
             buttonLoading={buttonLoading}
+            selectedPayment={selectedPayment}
           />
         </div>
         <div className="w-full max-w-[450px]">

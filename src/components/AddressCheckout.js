@@ -10,7 +10,8 @@ const AddressCheckout = ({
   handleOrder,
   addresses,
   setAddresses,
-  buttonLoading
+  buttonLoading,
+  selectedPayment
 }) => {
   
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -193,6 +194,7 @@ const AddressCheckout = ({
         <Button
           className="w-full bg-blue-500 text-white py-5 text-base mt-3"
           type="submit"
+          disabled={selectedPayment === "paypal" ? true: false}
           loading={buttonLoading}
           onClick={() => handleOrder({
             name: addresses[0]?.fullName,
