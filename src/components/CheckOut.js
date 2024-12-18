@@ -272,7 +272,7 @@ export const CheckOut = () => {
                   }}
                 >
                   <PayPalButton
-                    amount={(total + shippingPrice) / 24000}
+                    amount={((total + shippingPrice) / 24000).toFixed(2)}
                     onSuccess={(details) => {
 
                       handleOrder({
